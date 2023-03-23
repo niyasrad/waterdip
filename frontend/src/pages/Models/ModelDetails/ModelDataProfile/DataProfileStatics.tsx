@@ -18,8 +18,8 @@ export const DataProfileStats = ({ datasetId, model_id, model_version_id }: any)
       model_id: model_id,
       model_version_id: model_version_id,
       dataset_id: datasetId,
-      start_date: fromDate,
-      end_date: toDate 
+      start_time: fromDate,
+      end_time: toDate 
   })
   const datasetInfo = data && data.data;
   return (

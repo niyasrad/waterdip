@@ -69,13 +69,13 @@ interface GetMetricsDatasetParams {
   model_id: string;
   model_version_id: string;
   dataset_id: string;
-  start_date?: Date | null;
-  end_date?: Date | null;
+  start_time?: Date | null;
+  end_time?: Date | null;
 }
 
 
-export const useGetMetricsDataset = ({model_id, model_version_id, dataset_id, start_date, end_date }: GetMetricsDatasetParams) => {
-  return useQuery([dataset_id], queryDataset, {
+export const useGetMetricsDataset = ({model_id, model_version_id, dataset_id, start_time, end_time }: GetMetricsDatasetParams) => {
+  return useQuery([dataset_id, start_time, end_time], queryDataset, {
     refetchOnWindowFocus: false
   });
   async function queryDataset() {
@@ -83,8 +83,8 @@ export const useGetMetricsDataset = ({model_id, model_version_id, dataset_id, st
       model_id: model_id,
       model_version_id: model_version_id, 
       dataset_id: dataset_id,
-      start_date: start_date,
-      end_date: end_date
+      start_time: start_time,
+      end_time: end_time
     };
     const response = await axios.get<DatasetInfoResponse>(GET_METRICS_DATASET, {
       params: apiParams

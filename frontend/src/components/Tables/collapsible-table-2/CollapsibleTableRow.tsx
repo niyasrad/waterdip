@@ -177,13 +177,13 @@ export default function CollapsibleTableRow(props: { row: any, data_type: any })
           <Collapse in={open} timeout="auto" unmountOnExit>
             <>
               <Box className={classes.minMax}>
-                Dataset {row.column_name}: Accuracy minimum is {Math.min(...row.histogram.val)} and
-                maximum is {Math.max(...row.histogram.val)}
+                Dataset {row.column_name}: Accuracy minimum is { row.histogram && row.histogram.val ? Math.min(...row.histogram.val) : "Infinity"} and
+                maximum is { row.histogram && row.histogram.val ? Math.max(...row.histogram.val) : "Infinity"}
               </Box>
               <ChartBar
                 name={row.column_name}
-                categories={row.histogram.bins}
-                data={row.histogram.val}
+                categories={row.histogram && row.histogram.bins ? row.histogram.bins: []}
+                data={row.histogram && row.histogram.val ? row.histogram.val : []}
                 options={{
                   height: 200,
                   width: '70%',
