@@ -18,9 +18,6 @@ export const GET_MODEL_DATA_PERF_PCA_API = makeUrl('data.perf.pca');
 export const GET_MODEL_DATA_PERF_CLUSTER_API = makeUrl('data.perf.cluster');
 export const GET_MODEL_DATA_PERF_ANOMALOUS_API = makeUrl('data.perf.anomalous');
 
-export const GET_MODEL_DATA_EXPORT_LIST = makeUrl('model.export.list');
-export const CREATE_MODEL_ANOMALOUS_EXPORT = makeUrl('model.export.anomalous');
-
 export const GET_DATASETS_API = makeUrl('list.datasets');
 export const GET_DATASET_INFO_API = makeUrl(`dataset.info`);
 export const GET_METRICS_DATASET = makeUrl(`metrics.dataset`);
