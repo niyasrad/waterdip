@@ -109,7 +109,6 @@ class MonitorService:
         condition: BaseMonitorCondition,
         severity: MonitorSeverity,
     ) -> ServiceBaseMonitor:
-
         self._check_monitor_identification(identification)
 
         monitor_id = uuid.uuid4()
@@ -212,7 +211,7 @@ class MonitorService:
             limit=pagination.limit if pagination else 10,
         )
         for monitor in monitors:
-            monitor.count_of_alerts = self.alert_service.count_alert_by_filter(
+            monitor.count_of_alerts = self.alert_service.count_alerts(
                 {"model_id": str(monitor.monitor_identification.model_id)}
             )
             monitor.model_name = self.model_service.find_by_id(

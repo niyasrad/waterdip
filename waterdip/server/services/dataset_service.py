@@ -86,7 +86,6 @@ class DatasetService:
             limit=pagination.limit if pagination else 10,
         )
         count_dataset = self._repository.count_dataset(filters=filters)
-
         return dataset_list, count_dataset
 
     def create_batch_dataset(self, dataset: ServiceBatchDataset) -> ServiceBatchDataset:

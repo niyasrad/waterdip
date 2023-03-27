@@ -192,7 +192,7 @@ class ModelListRow(BaseModel):
 
 class ModelListResponse(BaseModel):
     model_list: List[ModelListRow]
-    meta: Optional[Dict[str, Union[str, int]]]
+    meta: Optional[Dict[str, int]]
 
 
 class ModelVersionInfoResponse(BaseModel):

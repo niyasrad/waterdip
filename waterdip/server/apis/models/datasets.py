@@ -49,4 +49,4 @@ class DatasetListResponse(BaseModel):
     """
 
     dataset_list: List[DatasetListRow]
-    meta: Optional[Dict[str, Union[int, str]]]
+    meta: Optional[Dict[str, int]]

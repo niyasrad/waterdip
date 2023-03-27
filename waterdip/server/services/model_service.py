@@ -366,11 +366,11 @@ class ModelService:
             model_id
         )
 
-        alerts_count = self._alert_service.count_alert_by_filter(
+        alerts_count = self._alert_service.count_alerts({"model_id": str(model_id)})
+        alert_week_stats = self._alert_service.alert_week_stats(model_id)
+        latest_alerts = self._alert_service.find_alerts_by_filter(
             {"model_id": str(model_id)}
         )
-        alert_week_stats = self._alert_service.alert_week_stats(model_id)
-        latest_alerts = self._alert_service.find_alerts(model_id)
         model_versions = self._model_version_service.find_all_versions_for_model(
             model_id=model_id
         )

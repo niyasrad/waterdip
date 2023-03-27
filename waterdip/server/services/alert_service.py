@@ -14,14 +14,17 @@
 
 from collections import OrderedDict
 from datetime import date, datetime, timedelta
-from typing import Dict, List
+from typing import Dict, List, Optional, Union
 from uuid import UUID
 
 from dateutil.parser import parse
 from fastapi import Depends
 
 from waterdip.core.commons.models import MonitorType
+from waterdip.server.apis.models.alerts import AlertListRow
 from waterdip.server.apis.models.models import ModelOverviewAlertList
+from waterdip.server.apis.models.params import RequestPagination, RequestSort
+from waterdip.server.db.mongodb import MONGO_COLLECTION_MONITORS
 from waterdip.server.db.repositories.alert_repository import (
     AlertDB,
     AlertRepository,
@@ -47,9 +50,15 @@ class AlertService:
         self._repository = repository
 
     def insert_alert(self, alert: BaseAlertDB) -> AlertDB:
+        """
+        Insert a new alert into the database
+        """
         return self._repository.insert_alert(alert)
 
     def get_alerts(self, model_ids: List[str]) -> Dict[str, Dict[str, int]]:
+        """
+        Get alerts for each model
+        """
         _agg_alerts: Dict[str, Dict[str, int]] = dict()
         agg_pipeline = [
             {"$match": {"model_id": {"$in": model_ids}}},
@@ -83,10 +92,16 @@ class AlertService:
             _agg_alerts[model_id] = d
         return _agg_alerts
 
-    def count_alert_by_filter(self, filters: Dict) -> int:
+    def count_alerts(self, filters: Dict = {}) -> int:
+        """
+        Count alerts for a given filter
+        """
         return self._repository.count_alerts(filters)
 
     def alert_week_stats(self, model_id):
+        """
+        Get alerts for the last 7 days
+        """
         alerts_days = 7
         today_date = datetime.combine(date.today(), datetime.min.time())
 
@@ -142,7 +157,15 @@ class AlertService:
             sorted(day_vs_count.items(), key=lambda x: parse(x[0]))
         )
         week_alerts_average = sum(day_vs_count.values()) / 7 if available_days else 0
-        today_alert_count = self.today_alert_count(model_id)
+        today_date = datetime.combine(date.today(), datetime.min.time())
+        today_alerts_count_filter = {
+            "model_id": str(model_id),
+            "created_at": {
+                "$gte": today_date,
+                "$lte": datetime.utcnow(),
+            },
+        }
+        today_alert_count = self._repository.count_alerts(today_alerts_count_filter)
         if week_alerts_average == 0:
             """
             If week_alerts_average is 0, then we can't calculate the percentage change as it is not defined, hence we are setting it to zero.
@@ -158,30 +181,77 @@ class AlertService:
             "alert_percentage_change": alert_percentage_change,
         }
 
-    def find_alerts(
-        self, model_id: str, limit: int = 5
+    def find_alerts_by_filter(
+        self, filters: Dict, limit: int = 5
     ) -> List[ModelOverviewAlertList]:
-        return [
-            ModelOverviewAlertList(
-                alert_id=alert["alert_id"],
-                monitor_type=MonitorType(alert["monitor_type"]),
-                created_at=alert["created_at"],
-            )
-            for alert in self._repository.find_alerts(model_id, limit)
+        """
+        Find alerts by filter
+        """
+        agg_pipeline = [
+            {"$match": filters},
+            {
+                "$lookup": {
+                    "from": MONGO_COLLECTION_MONITORS,
+                    "localField": "monitor_id",
+                    "foreignField": "monitor_id",
+                    "as": "monitor",
+                }
+            },
+            {"$sort": {"created_at": -1}},
+            {"$limit": limit},
         ]
 
-    def today_alert_count(self, model_id: str) -> int:
-        today_date = datetime.combine(date.today(), datetime.min.time())
-        today_alerts_count_filter = {
-            "model_id": str(model_id),
-            "created_at": {
-                "$gte": today_date,
-                "$lte": datetime.utcnow(),
-            },
-        }
+        return [
+            ModelOverviewAlertList(
+                alert_id=alert.get("alert_id"),
+                monitor_name=alert.get("monitor")[0].get("monitor_name"),
+                monitor_type=MonitorType(alert.get("monitor_type")),
+                created_at=alert.get("created_at"),
+            )
+            for alert in self._repository.agg_alerts(agg_pipeline)
+        ]
 
-        today_alert_count = self._repository.count_alerts(today_alerts_count_filter)
-        return today_alert_count
+    def list_alerts(
+        self,
+        sort_request: Optional[RequestSort] = None,
+        pagination: Optional[RequestPagination] = None,
+    ) -> List[AlertListRow]:
+        """
+        List alerts with pagination and sorting
+        """
+        limit = pagination.limit if pagination else 10
+        skip = (pagination.page - 1) * pagination.limit if pagination else 0
+
+        agg_pipeline = [
+            {
+                "$lookup": {
+                    "from": MONGO_COLLECTION_MONITORS,
+                    "localField": "monitor_id",
+                    "foreignField": "monitor_id",
+                    "as": "monitor",
+                }
+            },
+            {"$limit": limit},
+            {"$skip": skip},
+        ]
+        if sort_request.sort:
+            agg_pipeline.append(
+                {"$sort": {sort_request.get_sort_field: sort_request.get_sort_order}}
+            )
+        return [
+            AlertListRow(
+                created_at=alert.get("created_at"),
+                monitor_name=alert.get("monitor")[0].get("monitor_name"),
+                severity=alert.get("monitor")[0].get("severity"),
+                monitor_type=alert.get("monitor")[0].get("monitor_type"),
+                status=alert.get("status"),
+                action=alert.get("action"),
+            )
+            for alert in self._repository.agg_alerts(agg_pipeline)
+        ]
 
     def delete_alerts_by_model_id(self, model_id: UUID) -> None:
+        """
+        Delete alerts by model id
+        """
         self._repository.delete_alerts_by_model_id(str(model_id))
