@@ -1,5 +1,5 @@
 import { merge } from 'lodash';
-import { Theme } from '@material-ui/core/styles';
+import { Theme } from '@mui/material/styles';
 import Fab from './Fab';
 import Card from './Card';
 import Chip from './Chip';

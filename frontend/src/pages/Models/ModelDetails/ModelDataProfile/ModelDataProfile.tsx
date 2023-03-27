@@ -1,9 +1,8 @@
 import Page from '../../../../components/Page';
-import { experimentalStyled as styled } from '@material-ui/core/styles';
-import { makeStyles } from '@material-ui/styles';
+import { styled } from '@mui/material/styles';
 import { useParams } from 'react-router-dom';
 
-import { Grid, Box, Select, TextField, MenuItem } from '@material-ui/core';
+import { Grid, Box, Select, TextField, MenuItem } from '@mui/material';
 import { useState, useEffect } from 'react';
 import { useSelector } from '../../../../redux/store';
 import { DateRangeFilterState } from '../../../../redux/slices/dateRangeFilter';
@@ -16,25 +15,32 @@ import { DataProfileStats } from './DataProfileStatics';
 import { useGetDatasets } from '../../../../api/datasets/GetDatasets';
 import { useLocation } from 'react-router-dom';
 
-const RootStyle = styled('div')({
-  overflowY: 'hidden',
-  padding: '1.6rem 1.6rem',
-  background: colors.white
-});
-const useStyles = makeStyles({
-  box: {
+const PREFIX = 'ModelDataProfile';
+
+const classes = {
+  box: `${PREFIX}-box`,
+  flexBox: `${PREFIX}-flexBox`,
+  conatinerHeading: `${PREFIX}-conatinerHeading`,
+  select: `${PREFIX}-select`,
+  card: `${PREFIX}-card`,
+  cardHeading: `${PREFIX}-cardHeading`
+};
+
+// TODO jss-to-styled codemod: The Fragment root was replaced by div. Change the tag if needed.
+const Root = styled('div')({
+  [`& .${classes.box}`]: {
     display: 'flex'
   },
-  flexBox: {
+  [`& .${classes.flexBox}`]: {
     display: 'flex',
     gap: '10%'
   },
-  conatinerHeading: {
+  [`& .${classes.conatinerHeading}`]: {
     fontSize: '.9rem',
     color: colors.text,
     fontWeight: 500
   },
-  select: {
+  [`& .${classes.select}`]: {
     marginTop: '.75rem',
     marginBottom: '.75rem',
     backgroundColor: `${colors.white} !important`,
@@ -54,7 +60,7 @@ const useStyles = makeStyles({
       borderColor: `${colors.text} !important`
     }
   },
-  card: {
+  [`& .${classes.card}`]: {
     width: '100%',
     maxWidth: '360px',
     color: colors.text,
@@ -63,7 +69,7 @@ const useStyles = makeStyles({
     padding: '1rem',
     height: '160px'
   },
-  cardHeading: {
+  [`& .${classes.cardHeading}`]: {
     fontSize: '.85rem',
     fontWeight: 600,
     letterSpacing: '.25px',
@@ -71,8 +77,14 @@ const useStyles = makeStyles({
   }
 });
 
+const RootStyle = styled('div')({
+  overflowY: 'hidden',
+  padding: '1.6rem 1.6rem',
+  background: colors.white
+});
+
 const ModelDataProfile = () => {
-  const classes = useStyles();
+
   const location = useLocation();
   const { modelId } = useParams();
   const [dataset, setDataset] = useState<string>('');
@@ -87,7 +99,7 @@ const ModelDataProfile = () => {
     toDate ? toDate : now
   )} `;
   return (
-    <>
+    (<Root>
       <Page title="Model Dataset | Waterdip">
         <RootStyle>
           <Box className={classes.flexBox}>
@@ -108,7 +120,7 @@ const ModelDataProfile = () => {
             </>
         </RootStyle>
       </Page>
-    </>
+    </Root>)
   );
 };
 export default ModelDataProfile;

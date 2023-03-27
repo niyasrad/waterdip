@@ -17,8 +17,8 @@
 
 import { useEffect } from 'react';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
-import { experimentalStyled as styled } from '@material-ui/core/styles';
-import { Box, Drawer, Typography } from '@material-ui/core';
+import { experimentalStyled as styled } from '@mui/material/styles';
+import { Box, Drawer, Typography } from '@mui/material';
 import Logo from '../../components/Logo';
 import Scrollbar from '../../components/Scrollbar';
 import NavSection from '../../components/NavSection';
@@ -38,7 +38,7 @@ const AccountStyle = styled('div')(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
   padding: theme.spacing(2, 2.5),
-  borderRadius: theme.shape.borderRadiusSm,
+  borderRadius: theme.shape.borderRadius,
   backgroundColor: theme.palette.grey[500_12]
 }));
 

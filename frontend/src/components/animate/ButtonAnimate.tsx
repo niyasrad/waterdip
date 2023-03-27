@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 // material
-import { Box, BoxProps } from '@material-ui/core';
+import { Box, BoxProps } from '@mui/material';
 //
 import { varSmallClick, varMediumClick } from './variants';
 

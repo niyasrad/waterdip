@@ -4,7 +4,7 @@ import alertCircleFill from '@iconify/icons-eva/alert-circle-fill';
 import alertTriangleFill from '@iconify/icons-eva/alert-triangle-fill';
 import checkmarkCircle2Fill from '@iconify/icons-eva/checkmark-circle-2-fill';
 // material
-import { Theme } from '@material-ui/core/styles';
+import { Theme } from '@mui/material/styles';
 // @types
 import { ColorSchema } from '../../@types/theme';
 

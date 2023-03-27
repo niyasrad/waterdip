@@ -1,10 +1,25 @@
 import { ReactNode, useMemo } from 'react';
 // material
-import { alpha, ThemeProvider, createTheme, useTheme } from '@material-ui/core/styles';
+import {
+  alpha,
+  ThemeProvider,
+  Theme,
+  StyledEngineProvider,
+  createTheme,
+  useTheme,
+  adaptV4Theme,
+} from '@mui/material/styles';
 // hooks
 import useSettings from '../hooks/useSettings';
 //
 import componentsOverride from '../theme/overrides';
+
+
+declare module '@mui/styles/defaultTheme' {
+  // eslint-disable-next-line @typescript-eslint/no-empty-interface
+  interface DefaultTheme extends Theme {}
+}
+
 
 // ----------------------------------------------------------------------
 
@@ -31,8 +46,12 @@ export default function ThemePrimaryColor({ children }: ThemePrimaryColorProps) 
     [setColor, outerTheme]
   );
 
-  const theme = createTheme(themeOptions);
+  const theme = createTheme(adaptV4Theme(themeOptions));
   theme.components = componentsOverride(theme);
 
-  return <ThemeProvider theme={theme}>{children}</ThemeProvider>;
+  return (
+    <StyledEngineProvider injectFirst>
+      <ThemeProvider theme={theme}>{children}</ThemeProvider>
+    </StyledEngineProvider>
+  );
 }

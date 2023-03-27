@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Stepper, Step, StepLabel, Button, Typography, CircularProgress } from '@material-ui/core';
+import { styled } from '@mui/material/styles';
+import { Stepper, Step, StepLabel, Button, Typography, CircularProgress } from '@mui/material';
 import { Formik, Form } from 'formik';
 import { useQueryClient } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
-import { makeStyles } from '@material-ui/core/styles';
 import { colors } from '../../../../theme/colors';
-import { Grid } from '@material-ui/core';
+import { Grid } from '@mui/material';
 import MonitorCondition from './ComponentsStep/MonitorCondition';
 import MonitorAction from './ComponentsStep/MonitorAction';
 import formInitialValues from './FormInitialValues';
@@ -15,8 +15,19 @@ import { PATH_DASHBOARD } from '../../../../routes/paths';
 import { useMonitorCreate } from '../../../../api/monitors/createMonitor';
 import MonitorReview from './ComponentsStep/MonitorReview';
 
-const useStyles = makeStyles(() => ({
-  container: {
+const PREFIX = 'VerticalLinearStepper';
+
+const classes = {
+  container: `${PREFIX}-container`,
+  stepperContainer: `${PREFIX}-stepperContainer`,
+  stepGrid: `${PREFIX}-stepGrid`,
+  contentGrid: `${PREFIX}-contentGrid`,
+  stepLabel: `${PREFIX}-stepLabel`
+};
+
+// TODO jss-to-styled codemod: The Fragment root was replaced by div. Change the tag if needed.
+const Root = styled('div')(() => ({
+  [`& .${classes.container}`]: {
     background: colors.white,
     padding: '1.8rem 2.4rem 3.2rem 2.4rem',
     borderRadius: '4px',
@@ -24,21 +35,25 @@ const useStyles = makeStyles(() => ({
     marginBottom: '1.6rem',
     minHeight: '80vh'
   },
-  stepperContainer: {
+
+  [`& .${classes.stepperContainer}`]: {
     margin: '1rem 0 0 0',
     height: '75%',
-    '& .css-ua46y1-MuiStepConnector-line': {
+    [`& .MuiStepConnector-line`]: {
       height: '100% !important',
       minHeight: 'none !important'
     }
   },
-  stepGrid: {
+
+  [`& .${classes.stepGrid}`]: {
     borderRight: `1px solid ${colors.textLight}`
   },
-  contentGrid: {
+
+  [`& .${classes.contentGrid}`]: {
     paddingLeft: '2rem'
   },
-  stepLabel: {
+
+  [`& .${classes.stepLabel}`]: {
     fontSize: '.8rem',
     fontWeight: 600,
     color: colors.text,
@@ -53,22 +68,22 @@ function _renderStepContent(step: number, monitorType: any, model_id: any, model
   switch (step) {
     case 0:
       return (
-        <>
+        (<Root>
           <MonitorCondition monitorType={monitorType} model_id={model_id} model_version_id={model_version_id}/>
           {/* <MonitorMethod monitorType={monitorType} /> */}
-        </>
+        </Root>)
       );
     case 1:
       return (
-        <>
+        <Root>
           <MonitorAction />
-        </>
+        </Root>
       );
     case 2:
       return (
-        <>
+        <Root>
           <MonitorReview monitorType={monitorType}/>
-        </>
+        </Root>
       );
     default:
       return <div>Not Found</div>;
@@ -80,7 +95,7 @@ type Props = {
   model_version_id: any
 };
 export default function VerticalLinearStepper({ monitorType, model_id, model_version_id }: Props) {
-  const classes = useStyles();
+
   const [activeStep, setActiveStep] = useState(0);
   const isLastStep = activeStep === steps.length - 1;
   // const currentValidationSchema = validationSchema[activeStep];
@@ -100,7 +115,7 @@ export default function VerticalLinearStepper({ monitorType, model_id, model_ver
         },
         "monitor_condition": {
           "evaluation_metric": values.monitor_condition.evaluation_metric,
-          ...(values.monitor_type!== "Model Performance") && {"dimensions": values.monitor_condition.dimensions},
+          ...(values.monitor_type!== "Model Performance" && {"dimensions": values.monitor_condition.dimensions}),
           "threshold": {
             "threshold" : values.monitor_condition.threshold.threshold == "Lesser" ? "lt" : "gt",
             "value" : values.monitor_condition.threshold.value
@@ -138,7 +153,7 @@ export default function VerticalLinearStepper({ monitorType, model_id, model_ver
   }
 
   return (
-    <>
+    <Root>
       <Grid item container xs={12} className={classes.container}>
         <Grid className={classes.stepGrid} item xs={2}>
           <Stepper
@@ -230,6 +245,6 @@ export default function VerticalLinearStepper({ monitorType, model_id, model_ver
           </>
         </Grid>
       </Grid>
-    </>
+    </Root>
   );
 }

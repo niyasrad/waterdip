@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+import { styled } from '@mui/material/styles';
 import { Icon } from '@iconify/react';
 import { SnackbarProvider } from 'notistack';
 import infoFill from '@iconify/icons-eva/info-fill';
@@ -6,28 +7,43 @@ import alertCircleFill from '@iconify/icons-eva/alert-circle-fill';
 import alertTriangleFill from '@iconify/icons-eva/alert-triangle-fill';
 import checkmarkCircle2Fill from '@iconify/icons-eva/checkmark-circle-2-fill';
 // material
-import { alpha, makeStyles } from '@material-ui/core/styles';
-import { Box } from '@material-ui/core';
+import { alpha } from '@mui/material/styles';
+import { Box } from '@mui/material';
 // @types
 import { ColorSchema } from '../@types/theme';
 
-// ----------------------------------------------------------------------
+const PREFIX = 'NotistackProvider';
 
-const useStyles = makeStyles((theme) => {
+const classes = {
+  containerRoot: `${PREFIX}-containerRoot`,
+  contentRoot: `${PREFIX}-contentRoot`,
+  message: `${PREFIX}-message`,
+  action: `${PREFIX}-action`,
+  variantInfo: `${PREFIX}-variantInfo`,
+  variantSuccess: `${PREFIX}-variantSuccess`,
+  variantWarning: `${PREFIX}-variantWarning`,
+  variantError: `${PREFIX}-variantError`
+};
+
+
+
+const StyledSnackbarProvider = styled(SnackbarProvider)((
+  {
+    theme
+  }
+) => {
   const isLight = theme.palette.mode === 'light';
 
   const createStyle = {
-    color: `${theme.palette.text.primary} !important`,
-    backgroundColor: `${theme.palette.background.paper} !important`
+    color: `black !important`,
+    backgroundColor: `white !important`
   };
-
   return {
-    containerRoot: {
-      '& .MuiCollapse-wrapperInner': {
-        width: '100%'
-      }
+    [`& .${classes.containerRoot}`]: {
+      backgroundColor: 'white !important',
+      color: 'black !important'
     },
-    contentRoot: {
+    [`& .${classes.contentRoot}`]: {
       width: '100%',
       padding: theme.spacing(1.5),
       margin: theme.spacing(0.25, 0),
@@ -36,11 +52,11 @@ const useStyles = makeStyles((theme) => {
       color: theme.palette.grey[isLight ? 0 : 800],
       backgroundColor: theme.palette.grey[isLight ? 900 : 0]
     },
-    message: {
+    [`& .${classes.message}`]: {
       padding: 0,
       fontWeight: theme.typography.fontWeightMedium
     },
-    action: {
+    [`& .${classes.action}`]: {
       marginRight: -4,
       '& svg': {
         width: 20,
@@ -49,10 +65,10 @@ const useStyles = makeStyles((theme) => {
         '&:hover': { opacity: 1 }
       }
     },
-    variantInfo: { ...createStyle },
-    variantSuccess: { ...createStyle },
-    variantWarning: { ...createStyle },
-    variantError: { ...createStyle }
+    [`&.${classes.variantInfo}`]: { ...createStyle },
+    [`&.${classes.variantError}`]: { ...createStyle },
+    [`&.${classes.variantSuccess}`]: { ...createStyle },
+    [`&.${classes.variantWarning}`]: { ...createStyle },
   };
 });
 
@@ -89,10 +105,10 @@ type NotistackProviderProps = {
 };
 
 function NotistackProvider({ children }: NotistackProviderProps) {
-  const classes = useStyles();
+  
 
   return (
-    <SnackbarProvider
+    <StyledSnackbarProvider
       dense
       maxSnack={5}
       preventDuplicate
@@ -101,6 +117,7 @@ function NotistackProvider({ children }: NotistackProviderProps) {
         vertical: 'top',
         horizontal: 'right'
       }}
+    
       iconVariant={{
         success: <SnackbarIcon icon={checkmarkCircle2Fill} color="success" />,
         error: <SnackbarIcon icon={infoFill} color="error" />,
@@ -110,7 +127,7 @@ function NotistackProvider({ children }: NotistackProviderProps) {
       classes={classes}
     >
       {children}
-    </SnackbarProvider>
+    </StyledSnackbarProvider>
   );
 }
 

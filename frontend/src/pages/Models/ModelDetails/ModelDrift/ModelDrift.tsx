@@ -1,11 +1,10 @@
 import Page from "../../../../components/Page";
+import { styled } from '@mui/material/styles';
 import LoadingScreen from "../../../../components/LoadingScreen";
 import CollapsibleTable from "../../../../components/Tables/collapsible-table-1";
-import { MenuItem, Grid, Box, TextField } from "@material-ui/core";
-import { experimentalStyled as styled } from "@material-ui/core/styles";
+import { MenuItem, Grid, Box, TextField } from "@mui/material";
 import { DateRangeFilterState } from "../../../../redux/slices/dateRangeFilter";
 import { Heading } from "../../../../components/Heading";
-import { makeStyles } from "@material-ui/core/styles";
 import { colors } from "../../../../theme/colors";
 
 import ChartBar from "../../../../components/charts/ChartBar";
@@ -15,6 +14,24 @@ import { useEffect, useMemo, useState } from "react";
 import VersionSelect from "../VersionSelect";
 import { useMetricsPsi } from "api/models/GetMetricsPsi";
 import Scrollbar from "components/Scrollbar";
+
+const PREFIX = 'ModelDrift';
+
+const classes = {
+  graph: `${PREFIX}-graph`,
+  table: `${PREFIX}-table`
+};
+
+const StyledPage = styled(Page)(() => ({
+  [`& .${classes.graph}`]: {
+    maxWidth: "100%",
+  },
+
+  [`& .${classes.table}`]: {
+    marginTop: "1.6rem",
+    maxWidth: "80%",
+  }
+}));
 
 function useQuery() {
   const { search } = useLocation();
@@ -56,18 +73,9 @@ const RootStyle = styled("div")({
   padding: "1.6rem 2.4rem",
   background: colors.white,
 });
-const useStyles = makeStyles(() => ({
-  graph: {
-    maxWidth: "100%",
-  },
-  table: {
-    marginTop: "1.6rem",
-    maxWidth: "80%",
-  },
-}));
 
 const ModelDrift = () => {
-  const classes = useStyles();
+
   let query = useQuery();
   const { modelId } = useParams();
   const versionId = query.get("version_id");
@@ -89,7 +97,7 @@ const ModelDrift = () => {
   
 
   return (
-    <Page title="Model Drift | Waterdip">
+    <StyledPage title="Model Drift | Waterdip">
       <RootStyle>
         {data && Object.keys(data).length > 0 ?
           <>
@@ -144,7 +152,7 @@ const ModelDrift = () => {
         }
         
       </RootStyle>
-    </Page>
+    </StyledPage>
   );
 };
 

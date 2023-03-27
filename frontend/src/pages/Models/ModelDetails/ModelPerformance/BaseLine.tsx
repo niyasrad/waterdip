@@ -1,20 +1,30 @@
 import { Heading } from '../../../../components/Heading';
-import { makeStyles } from '@material-ui/styles';
+import { styled } from '@mui/material/styles';
 import { useSelector } from '../../../../redux/store';
 import { DateRangeFilterState } from '../../../../redux/slices/dateRangeFilter';
 import { formatDateTime } from '../../../../utils/date';
-import { Button } from '@material-ui/core';
+import { Button } from '@mui/material';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { PATH_PAGE, PATH_DASHBOARD } from '../../../../routes/paths';
 import { colors } from '../../../../theme/colors';
 import { useMemo } from 'react';
 
-const useStyles = makeStyles({
-  baseLine: {
+const PREFIX = 'BaseLine';
+
+const classes = {
+  baseLine: `${PREFIX}-baseLine`,
+  baseLineContent: `${PREFIX}-baseLineContent`,
+  contentHeading: `${PREFIX}-contentHeading`,
+  contentText: `${PREFIX}-contentText`,
+  contentButton: `${PREFIX}-contentButton`
+};
+
+const Root = styled('div')({
+  [`&.${classes.baseLine}`]: {
     paddingLeft: '.8rem',
     marginTop: '-2rem'
   },
-  baseLineContent: {
+  [`& .${classes.baseLineContent}`]: {
     marginTop: '.6rem',
     width: '100%',
     color: colors.text,
@@ -22,19 +32,19 @@ const useStyles = makeStyles({
     borderRadius: '4px',
     padding: '1rem'
   },
-  contentHeading: {
+  [`& .${classes.contentHeading}`]: {
     fontSize: '.85rem',
     fontWeight: 600,
     letterSpacing: '.25px',
     marginBottom: '.5rem'
   },
-  contentText: {
+  [`& .${classes.contentText}`]: {
     fontSize: '.8rem',
     fontWeight: 500,
     letterSpacing: '.25px',
     padding: '.7rem 0 .5rem'
   },
-  contentButton: {
+  [`& .${classes.contentButton}`]: {
     padding: '.5rem 0rem',
     fontSize: '.8rem',
     fontWeight: 500,
@@ -52,7 +62,7 @@ function useQuery() {
 export default function BaseLine() {
   const navigate = useNavigate();
   const { modelId, tabName } = useParams();
-  const classes = useStyles();
+
   let query = useQuery();
   const now = new Date();
 
@@ -65,7 +75,7 @@ export default function BaseLine() {
   )} `;
 
   return (
-    <div className={classes.baseLine}>
+    <Root className={classes.baseLine}>
       <Heading heading="BaseLine" subtitle="baseline" />
       <div className={classes.baseLineContent}>
         <div className={classes.contentHeading}>Production</div>
@@ -82,6 +92,6 @@ export default function BaseLine() {
           Configure baseline {'>'}
         </Button>
       </div>
-    </div>
+    </Root>
   );
 }

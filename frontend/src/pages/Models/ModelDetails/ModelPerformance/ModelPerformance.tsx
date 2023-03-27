@@ -6,8 +6,8 @@ import {
   DialogActions,
   DialogContentText,
   Dialog,
-} from "@material-ui/core";
-import { experimentalStyled as styled } from "@material-ui/core/styles";
+} from "@mui/material";
+import { experimentalStyled as styled } from "@mui/material/styles";
 import Page from "../../../../components/Page";
 import LoadingScreen from "../../../../components/LoadingScreen";
 import Scrollbar from "../../../../components/Scrollbar";
@@ -20,7 +20,7 @@ import { DateRangeFilterState } from "../../../../redux/slices/dateRangeFilter";
 import { useModelPerformance } from "../../../../api/models/GetModelPerformance";
 import PerformanceChart from "./PerformanceChart";
 import { AxiosError, AxiosRequestConfig } from "axios";
-import Button from "@material-ui/core/Button";
+import Button from "@mui/material/Button";
 import { PATH_DASHBOARD } from "routes/paths";
 import VersionSelect from "../VersionSelect";
 

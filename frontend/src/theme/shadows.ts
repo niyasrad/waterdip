@@ -1,5 +1,4 @@
-import { alpha } from '@material-ui/core/styles';
-import { Shadows } from '@material-ui/core/styles/shadows';
+import { alpha, Shadows } from '@mui/material/styles';
 import palette from './palette';
 
 // ----------------------------------------------------------------------
@@ -19,11 +18,11 @@ interface CustomShadowOptions {
   error: string;
 }
 
-declare module '@material-ui/core/styles/createTheme' {
+declare module '@mui/material/styles/createTheme' {
   interface Theme {
     customShadows: CustomShadowOptions;
   }
-  interface ThemeOptions {
+  interface DeprecatedThemeOptions {
     customShadows?: CustomShadowOptions;
   }
 }

@@ -1,4 +1,4 @@
-import { Theme } from '@material-ui/core/styles';
+import { Theme } from '@mui/material/styles';
 
 // ----------------------------------------------------------------------
 
@@ -8,7 +8,7 @@ export default function Card(theme: Theme) {
       styleOverrides: {
         root: {
           boxShadow: theme.customShadows.z16,
-          borderRadius: theme.shape.borderRadiusMd,
+          borderRadius: theme.shape.borderRadius,
           position: 'relative',
           zIndex: 0 // Fix Safari overflow: hidden with border radius
         }

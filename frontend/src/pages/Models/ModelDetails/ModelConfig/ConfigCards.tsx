@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
+import { styled } from '@mui/material/styles';
 import { Heading } from '../../../../components/Heading';
-import { makeStyles } from '@material-ui/styles';
 import { formatDateTime } from '../../../../utils/date';
-import { Box, TextField, MenuItem, Button } from '@material-ui/core';
+import { Box, TextField, MenuItem, Button } from '@mui/material';
 import { DialogAnimate } from '../../../../components/animate';
 import { DialogBoxPart, DeleteDialogBox } from './dialogBox';
 import { colors } from '../../../../theme/colors';
@@ -10,49 +10,62 @@ import { useModelUpdate } from 'api/models/UpdateModel';
 import { useSnackbar } from 'notistack';
 import { useParams } from 'react-router-dom';
 
-const useStyles = makeStyles({
-  card: {
+const PREFIX = 'ConfigBaseLine';
+
+const classes = {
+  card: `${PREFIX}-card`,
+  baseLineContent: `${PREFIX}-baseLineContent`,
+  contentHeading: `${PREFIX}-contentHeading`,
+  contentText: `${PREFIX}-contentText`,
+  contentButton: `${PREFIX}-contentButton`,
+  btnContainer: `${PREFIX}-btnContainer`,
+  btn: `${PREFIX}-btn`,
+  delete: `${PREFIX}-delete`
+};
+
+const StyledBox = styled(Box)({
+  [`&.MuiBox-root`]: {
     maxWidth: '360px',
     marginBottom: '3rem'
   },
-  baseLineContent: {
+  [`& .${classes.baseLineContent}`]: {
     marginTop: '.6rem',
-    width: '100%',
     color: colors.text,
+    maxWidth: '360px',
     background: colors.boxBackground,
     borderRadius: '4px',
     padding: '1rem'
   },
-  contentHeading: {
+  [`& .${classes.contentHeading}`]: {
     fontSize: '.85rem',
     fontWeight: 600,
     letterSpacing: '.25px',
     marginBottom: '.5rem'
   },
-  contentText: {
+  [`& .${classes.contentText}`]: {
     fontSize: '.8rem',
     fontWeight: 500,
     letterSpacing: '.25px',
     padding: '.7rem 0 .5rem'
   },
-  contentButton: {
+  [`& .${classes.contentButton}`]: {
     padding: '.5rem 0rem',
     fontSize: '.8rem',
     fontWeight: 500,
     letterSpacing: '.25px',
     color: colors.textPrimary
   },
-  btnContainer: {
+  [`& .${classes.btnContainer}`]: {
     display: 'flex',
     justifyContent: 'flex-end'
   },
-  btn: {
+  [`& .${classes.btn}`]: {
     paddingLeft: '1.5rem',
     paddingRight: '1.5rem',
     background: colors.textPrimary,
     letterSpacing: '.1rem'
   },
-  delete: {
+  [`& .${classes.delete}`]: {
     borderRadius: '4px',
     marginTop: '1rem',
     paddingLeft: '1.5rem',
@@ -80,7 +93,7 @@ export const ConfigBaseLine = ({ path, data }: Props) => {
   const [dateTimeString, setDateTimeString] = useState(`${formatDateTime(dateRange[0] ? dateRange[0] : now)} to ${formatDateTime(
     dateRange[1] ? dateRange[1] : now
   )} `)
-  const classes = useStyles();
+
   const [expandForm, setExpandForm] = useState(path);
   
   useEffect(() => {
@@ -113,7 +126,7 @@ export const ConfigBaseLine = ({ path, data }: Props) => {
   };
 
   return (
-    <Box className={classes.card}>
+    <StyledBox className={classes.card}>
       <Heading heading="BaseLine" subtitle="baseline" />
       <Box className={classes.baseLineContent}>
         <Box className={classes.contentHeading}>Production</Box>
@@ -126,14 +139,14 @@ export const ConfigBaseLine = ({ path, data }: Props) => {
           <DialogBoxPart onSelect={handleSelect} onSave={handleSave} stringToMilliseconds={stringToMilliseconds}/>
         </DialogAnimate>
       </Box>
-    </Box>
+    </StyledBox>
   );
 };
 
 
 export const ConfigEvaluation = ({data}: any) => {
   const res = data?.data?.data;
-  const classes = useStyles();
+
   const [posClass, setPosClass] = useState<string>('');
   const { isUpdating, error, ModelUpdate } = useModelUpdate();
   const { modelId } = useParams();
@@ -143,6 +156,7 @@ export const ConfigEvaluation = ({data}: any) => {
   }
   
   return (
+    <StyledBox>
     <Box className={classes.card}>
       <Heading heading="Setup Positive Class" />
       <Box className={classes.baseLineContent}>
@@ -186,16 +200,18 @@ export const ConfigEvaluation = ({data}: any) => {
         </Box>
       </Box>
     </Box>
+    </StyledBox>
   );
 };
 
 export const ConfigAdvanced = () => {
-  const classes = useStyles();
+
   const [expandForm, setExpandForm] = useState(false);
   const handleDelete = (data: any) => {
     setExpandForm(data);
   };
   return (
+    <StyledBox>
     <Box className={classes.card}>
       <Heading heading="Advanced Configuration" />
       <Button
@@ -209,5 +225,6 @@ export const ConfigAdvanced = () => {
         <DeleteDialogBox onDelete={handleDelete} />
       </DialogAnimate>
     </Box>
+    </StyledBox>
   );
 };

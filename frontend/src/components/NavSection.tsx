@@ -1,6 +1,6 @@
 // material
-import { experimentalStyled as styled } from '@material-ui/core/styles';
-import { Box, List, ListSubheader, BoxProps } from '@material-ui/core';
+import { experimentalStyled as styled } from '@mui/material/styles';
+import { Box, List, ListSubheader, BoxProps } from '@mui/material';
 // theme
 import typography from '../theme/typography';
 import NavItem, { NavItemProps } from './NavItem';

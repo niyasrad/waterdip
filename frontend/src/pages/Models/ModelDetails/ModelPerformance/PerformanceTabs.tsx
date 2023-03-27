@@ -1,12 +1,19 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { Tabs, Tab } from '@material-ui/core';
+import { styled } from '@mui/material/styles';
+import { Tabs, Tab } from '@mui/material';
 import './tab.css';
 import { useState, useEffect } from 'react';
 import { colors } from '../../../../theme/colors';
 
-const useStyles = makeStyles({
-  root: {
+const PREFIX = 'PerformanceTabs';
+
+const classes = {
+  root: `${PREFIX}-root`,
+  TabItem: `${PREFIX}-TabItem`
+};
+
+const Root = styled('div')({
+  [`&.${classes.root}`]: {
     flexGrow: 1,
     width: '150px',
     height: '100%',
@@ -14,7 +21,7 @@ const useStyles = makeStyles({
     marginTop: '.8rem',
     paddingTop: '.4rem'
   },
-  TabItem: {
+  [`& .${classes.TabItem}`]: {
     marginRight: '0 !important',
     minHeight: '32px',
     borderRadius: 0,
@@ -24,13 +31,14 @@ const useStyles = makeStyles({
     paddingLeft: '1rem'
   }
 });
+
 type Props = {
   onChange: Function;
   currentTab: string;
 };
 
 export default function TabsPerformance({ onChange, currentTab }: Props) {
-  const classes = useStyles();
+
   const [value, setValue] = React.useState(currentTab);
 
   const handleChange = (event: React.ChangeEvent<{}>, newValue: string) => {
@@ -42,7 +50,7 @@ export default function TabsPerformance({ onChange, currentTab }: Props) {
   }, [value]);
 
   return (
-    <div className={classes.root}>
+    <Root className={classes.root}>
       <Tabs
         value={value}
         onChange={handleChange}
@@ -58,6 +66,6 @@ export default function TabsPerformance({ onChange, currentTab }: Props) {
         <Tab className={classes.TabItem} value={'sensitivity'} label="Sensitivity" />
         <Tab className={classes.TabItem} value={'specificity'} label="Specificity" />
       </Tabs>
-    </div>
+    </Root>
   );
 }

@@ -1,24 +1,40 @@
 import { useEffect, useState } from 'react';
-import { Box, TextareaAutosize, TextField } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { styled } from '@mui/material/styles';
+import { Box, TextField } from '@mui/material';
+import TextareaAutosize from '@mui/base/TextareaAutosize';
 import { colors } from '../../../../../theme/colors';
 import { useFormikContext } from 'formik';
 
-const useStyles = makeStyles(() => ({
-  actionInput: {
+const PREFIX = 'MonitorAction';
+
+const classes = {
+  actionInput: `${PREFIX}-actionInput`,
+  actionInputTitle: `${PREFIX}-actionInputTitle`,
+  actionInputContent: `${PREFIX}-actionInputContent`,
+  label: `${PREFIX}-label`,
+  desc: `${PREFIX}-desc`,
+  txtInp: `${PREFIX}-txtInp`
+};
+
+// TODO jss-to-styled codemod: The Fragment root was replaced by div. Change the tag if needed.
+const Root = styled('div')(() => ({
+  [`& .${classes.actionInput}`]: {
     margin: '0 0 1.8rem 0'
   },
-  actionInputTitle: {
+
+  [`& .${classes.actionInputTitle}`]: {
     fontSize: '.9rem',
     color: colors.text,
     fontWeight: 600,
     marginBottom: '.4rem'
   },
-  actionInputContent: {
+
+  [`& .${classes.actionInputContent}`]: {
     display: 'flex',
     flexDirection: 'column'
   },
-  label: {
+
+  [`& .${classes.label}`]: {
     display: 'flex',
     alignItems: 'center',
     marginBottom: '1rem',
@@ -53,7 +69,8 @@ const useStyles = makeStyles(() => ({
       background: colors.high
     }
   },
-  desc: {
+
+  [`& .${classes.desc}`]: {
     minWidth: 350,
     maxWidth: 350,
     minHeight: 100,
@@ -63,7 +80,8 @@ const useStyles = makeStyles(() => ({
     borderRadius: '4px',
     borderColor: colors.textLight
   },
-  txtInp: {
+
+  [`& .${classes.txtInp}`]: {
     width: '350px',
     transform: 'scale(1,.8)',
     '& .MuiInputBase-input': {
@@ -83,7 +101,7 @@ const useStyles = makeStyles(() => ({
 
 const MonitorAction = () => {
   const formikProps = useFormikContext();
-  const classes = useStyles();
+
   const [monitorName, setmonitorName] = useState<string>();
   const [severityValue, setseverityValue] = useState<string>('MEDIUM');
   const handleRadioChange = (e: any) => {
@@ -94,7 +112,7 @@ const MonitorAction = () => {
     formikProps.setFieldValue('actions.severity', severityValue);
   }, [monitorName, severityValue]);
   return (
-    <>
+    (<Root>
       <Box className={classes.actionInput}>
         <Box className={classes.actionInputTitle}>Severity</Box>
         <Box className={classes.actionInputContent}>
@@ -128,10 +146,12 @@ const MonitorAction = () => {
         <TextareaAutosize
           aria-label="empty textarea"
           placeholder="Type Here..."
-          className={classes.desc}
-        />
+          className={classes.desc} 
+          nonce={undefined} 
+          onResize={undefined}
+          onResizeCapture={undefined}        />
       </Box>
-    </>
+    </Root>)
   );
 };
 

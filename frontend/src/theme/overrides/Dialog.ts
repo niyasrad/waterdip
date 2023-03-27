@@ -1,4 +1,4 @@
-import { Theme } from '@material-ui/core/styles';
+import { Theme } from '@mui/material/styles';
 
 // ----------------------------------------------------------------------
 
@@ -9,7 +9,7 @@ export default function Dialog(theme: Theme) {
         paper: {
           boxShadow: theme.customShadows.z24,
           '&.MuiPaper-rounded': {
-            borderRadius: theme.shape.borderRadiusMd
+            borderRadius: theme.shape.borderRadius
           },
           '&.MuiDialog-paperFullScreen': {
             borderRadius: 0

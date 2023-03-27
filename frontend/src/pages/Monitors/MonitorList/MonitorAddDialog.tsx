@@ -1,5 +1,5 @@
-import { makeStyles } from '@material-ui/core/styles';
-import { Box, Button, Tab, TextField, Tabs, Select, MenuItem, DialogActions } from '@material-ui/core';
+import { styled } from '@mui/material/styles';
+import { Box, Button, Tab, TextField, Tabs, Select, MenuItem, DialogActions } from '@mui/material';
 import { Icon } from '@iconify/react';
 import { useState } from 'react';
 
@@ -13,12 +13,34 @@ import { usePaginatedModels } from '../../../api/models/GetModels';
 import { ModelListRow } from '../../../@types/model';
 import { versions } from 'process';
 
-const useStyles = makeStyles(() => ({
-  dialogBoxMonitorType: { padding: '1.1rem 1.8rem' },
-  modelContainer: {
-    marginBottom: '-0.5rem'
+const PREFIX = 'MonitorAddDialog';
+
+const classes = {
+  dialogBoxMonitorType: `${PREFIX}-dialogBoxMonitorType`,
+  modelContainer: `${PREFIX}-modelContainer`,
+  select: `${PREFIX}-select`,
+  selectDiv: `${PREFIX}-selectDiv`,
+  tabContainer: `${PREFIX}-tabContainer`,
+  conatinerHeading: `${PREFIX}-conatinerHeading`,
+  TabItems: `${PREFIX}-TabItems`,
+  TabItem: `${PREFIX}-TabItem`,
+  tabItemContent: `${PREFIX}-tabItemContent`,
+  itemContentChild: `${PREFIX}-itemContentChild`,
+  itemContentChildDisabled: `${PREFIX}-itemContentChildDisabled`,
+  itemHeading: `${PREFIX}-itemHeading`,
+  itemHeadingDisabled: `${PREFIX}-itemHeadingDisabled`,
+  itemDesc: `${PREFIX}-itemDesc`
+};
+
+const StyledBox = styled(Box)(() => ({
+  [`& .${classes.dialogBoxMonitorType}`]: { padding: '1.1rem 1.8rem' },
+
+  [`& .${classes.modelContainer}`]: {
+    marginBottom: '-0.5rem',
+    padding: '1.4rem'
   },
-  select: {
+
+  [`& .${classes.select}`]: {
     marginTop: '.75rem',
     marginBottom: '.75rem',
     minWidth: '20rem',
@@ -36,7 +58,8 @@ const useStyles = makeStyles(() => ({
       borderColor: `${colors.text} !important`
     }
   },
-  selectDiv: {
+
+  [`& .${classes.selectDiv}`]: {
     marginTop: '.75rem',
     minWidth: '20rem',
     fontSize: '0.8rem',
@@ -44,15 +67,18 @@ const useStyles = makeStyles(() => ({
     color: colors.textLight
     // border: `1px solid ${colors.textLight}`
   },
-  tabContainer: {
+
+  [`& .${classes.tabContainer}`]: {
     marginBottom: '1rem'
   },
-  conatinerHeading: {
+
+  [`& .${classes.conatinerHeading}`]: {
     fontSize: '.9rem',
     color: colors.text,
     fontWeight: 500
   },
-  TabItems: {
+
+  [`& .${classes.TabItems}`]: {
     marginTop: '1.1rem',
     '& .css-1pvp4f6-MuiButtonBase-root-MuiTab-root:not(:last-child)': {
       marginRight: '0 !important'
@@ -66,7 +92,8 @@ const useStyles = makeStyles(() => ({
       fontWeight: 500
     }
   },
-  TabItem: {
+
+  [`& .${classes.TabItem}`]: {
     borderBottom: `1px solid ${colors.textLight}`,
     borderRadius: '4px 4px 0 0 !important',
     fontWeight: 400,
@@ -76,10 +103,12 @@ const useStyles = makeStyles(() => ({
     padding: '0.36rem 1.2rem',
     minHeight: '27px'
   },
-  tabItemContent: {
+
+  [`&.${classes.tabItemContent}`]: {
     padding: '0rem 2.4rem 0 1.2rem'
   },
-  itemContentChild: {
+
+  [`& .${classes.itemContentChild}`]: {
     borderRadius: '4px',
     cursor: 'pointer',
     padding: '0.5rem 0 1rem 0rem',
@@ -97,7 +126,8 @@ const useStyles = makeStyles(() => ({
       fontSize: '0.8rem'
     }
   },
-  itemContentChildDisabled: {
+
+  [`& .${classes.itemContentChildDisabled}`]: {
     padding: '0.5rem 0 1rem 0rem',
     borderRadius: '4px',
     cursor: 'not-allowed',
@@ -106,19 +136,22 @@ const useStyles = makeStyles(() => ({
       fontSize: '0.8rem'
     }
   },
-  itemHeading: {
+
+  [`& .${classes.itemHeading}`]: {
     fontSize: '0.8rem',
     fontWeight: 500,
     color: colors.text,
     marginBottom: '0.25rem'
   },
-  itemHeadingDisabled: {
+
+  [`& .${classes.itemHeadingDisabled}`]: {
     fontSize: '0.8rem',
     fontWeight: 500,
     color: colors.textLight,
     marginBottom: '0.25rem'
   },
-  itemDesc: {
+
+  [`& .${classes.itemDesc}`]: {
     fontSize: '0.7rem',
     fontWeight: 400,
     color: colors.textLight
@@ -136,15 +169,15 @@ type TabItemProps = {
 };
 
 const TabContent = ({ data }: Props) => {
-  const classes = useStyles();
+
   const navigate = useNavigate();
   return (
-    <Box className={classes.tabItemContent}>
+    <StyledBox className={classes.tabItemContent}>
       <ul>
         {data.map((item: any) => {
           const disabled = item.disabled;
           return (
-            <>
+            <StyledBox>
               <li
                 className={`${
                   disabled === false
@@ -167,11 +200,11 @@ const TabContent = ({ data }: Props) => {
                 </Box>
                 <Box className={`hoverdesc ${classes.itemDesc}`}>{item.desc}</Box>
               </li>
-            </>
+            </StyledBox>
           );
         })}
       </ul>
-    </Box>
+    </StyledBox>
   );
 };
 
@@ -179,7 +212,7 @@ const MonitorAddDialog = (props: any) => {
   const { modelID, pathLocation } = useSelector(
     (state: { modelMonitorState: ModelMonitorState }) => state.modelMonitorState
   );
-  const classes = useStyles();
+
   const [model, setModel] = useState(modelID ? modelID : '');
   const [version, setVersion] = useState('');
   const [type, setType] = useState('');
@@ -225,7 +258,7 @@ const MonitorAddDialog = (props: any) => {
   console.log(modelList.filter(handleVersionFilter));
   console.log(pathLocation);
   return (
-    <Box className={classes.dialogBoxMonitorType}>
+    <StyledBox className={classes.dialogBoxMonitorType}>
       <Box className={classes.modelContainer}>
         <Box className={classes.conatinerHeading}>Select Model</Box>
         {pathLocation === 'model' ? (
@@ -310,7 +343,7 @@ const MonitorAddDialog = (props: any) => {
                 }}>Next</Button>
         </DialogActions>
       </Box>
-    </Box>
+    </StyledBox>
   );
 };
 

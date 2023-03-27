@@ -1,4 +1,5 @@
 import { Icon } from '@iconify/react';
+import { styled } from '@mui/material/styles';
 import { useState } from 'react';
 import arrowIosUpwardFill from '@iconify/icons-eva/arrow-ios-upward-fill';
 import arrowIosDownwardFill from '@iconify/icons-eva/arrow-ios-downward-fill';
@@ -14,41 +15,57 @@ import {
   TableCell,
   Typography,
   IconButton
-} from '@material-ui/core';
+} from '@mui/material';
 import { ChartBar } from 'components/charts';
-import { makeStyles } from '@material-ui/core/styles';
 import { colors } from '../../../theme/colors';
 
-// ----------------------------------------------------------------------
+const PREFIX = 'CollapsibleTableRow';
 
-const useStyles = makeStyles(() => ({
-  openBack: {
+const classes = {
+  openBack: `${PREFIX}-openBack`,
+  pointer: `${PREFIX}-pointer`,
+  name: `${PREFIX}-name`,
+  impact: `${PREFIX}-impact`,
+  tableCell: `${PREFIX}-tableCell`,
+  minMax: `${PREFIX}-minMax`,
+  span: `${PREFIX}-span`
+};
+
+// TODO jss-to-styled codemod: The Fragment root was replaced by div. Change the tag if needed.
+const Root = styled(TableRow)(() => ({
+  [`& .${classes.openBack}`]: {
     backgroundColor: colors.boxBackground,
     width: '100%'
   },
-  pointer: {
+
+  [`& .${classes.pointer}`]: {
     '&:hover': {
       backgroundColor: colors.boxBackground,
       cursor: 'pointer'
     }
   },
-  name: {
+
+  [`& .${classes.name}`]: {
     textTransform: 'capitalize',
     fontWeight: 600,
     color: colors.textPrimary,
     fontSize: '0.875rem'
   },
-  impact: {
+
+  [`& .${classes.impact}`]: {
     fontWeight: 500,
     color: colors.text,
     fontSize: '0.8rem'
   },
-  tableCell: {
+
+  [`& .${classes.tableCell}`]: {
     fontSize: '.8rem',
     fontWeight: 500
   },
-  minMax: { fontSize: '.75rem', fontWeight: 500 },
-  span: {
+
+  [`& .${classes.minMax}`]: { fontSize: '.75rem', fontWeight: 500 },
+
+  [`& .${classes.span}`]: {
     background: 'rgba(103, 128, 220, 0.16)',
     borderRadius: '6px',
     color: colors.textPrimary,
@@ -59,14 +76,14 @@ const useStyles = makeStyles(() => ({
 }));
 
 export default function CollapsibleTableRow(props: { row: any, data_type: any }) {
-  const classes = useStyles();
+
   const { row, data_type } = props;
   console.log(row);
   const [open, setOpen] = useState(false);
 
   return (
-    <>
-      <TableRow
+    (<>
+      <Root
         sx={{ border: `1px solid ${colors.tableHeadBack}`, borderBottom: 0 }}
         className={`${open ? classes.openBack : ''} borderBottom`}
       >
@@ -163,9 +180,8 @@ export default function CollapsibleTableRow(props: { row: any, data_type: any })
             </TableCell>
           </>
         )}
-      </TableRow>
-
-      <TableRow
+      </Root>
+      <Root
         sx={{ border: `1px solid ${colors.tableHeadBack}`, borderTop: 0 }}
         className={classes.openBack}
       >
@@ -195,7 +211,7 @@ export default function CollapsibleTableRow(props: { row: any, data_type: any })
             </>
           </Collapse>
         </TableCell>
-      </TableRow>
-    </>
+      </Root>
+    </>)
   );
 }
