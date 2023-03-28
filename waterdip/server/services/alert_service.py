@@ -24,7 +24,10 @@ from waterdip.core.commons.models import MonitorType
 from waterdip.server.apis.models.alerts import AlertListRow
 from waterdip.server.apis.models.models import ModelOverviewAlertList
 from waterdip.server.apis.models.params import RequestPagination, RequestSort
-from waterdip.server.db.mongodb import MONGO_COLLECTION_MONITORS
+from waterdip.server.db.mongodb import (
+    MONGO_COLLECTION_MODELS,
+    MONGO_COLLECTION_MONITORS,
+)
 from waterdip.server.db.repositories.alert_repository import (
     AlertDB,
     AlertRepository,
@@ -231,6 +234,14 @@ class AlertService:
                     "as": "monitor",
                 }
             },
+            {
+                "$lookup": {
+                    "from": MONGO_COLLECTION_MODELS,
+                    "localField": "model_id",
+                    "foreignField": "model_id",
+                    "as": "model",
+                }
+            },
             {"$limit": limit},
             {"$skip": skip},
         ]
@@ -242,6 +253,7 @@ class AlertService:
             AlertListRow(
                 created_at=alert.get("created_at"),
                 monitor_name=alert.get("monitor")[0].get("monitor_name"),
+                model_name=alert.get("model")[0].get("model_name"),
                 severity=alert.get("monitor")[0].get("severity"),
                 monitor_type=alert.get("monitor")[0].get("monitor_type"),
                 status=alert.get("status"),

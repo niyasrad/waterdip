@@ -58,6 +58,7 @@ class AlertListRow(BaseModel):
 
     created_at: datetime = Field(..., description="Alert creation time")
     monitor_name: str = Field(..., description="Name of the monitor")
+    model_name: str = Field(..., description="Name of the model")
     monitor_type: MonitorType = Field(..., description="Type of the monitor")
     severity: str = Field(..., description="Severity of the alert")
     status: Optional[str]

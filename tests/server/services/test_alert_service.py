@@ -23,6 +23,7 @@ from waterdip.server.apis.models.params import RequestSort
 from waterdip.server.db.models.alerts import BaseAlertDB
 from waterdip.server.db.mongodb import (
     MONGO_COLLECTION_ALERTS,
+    MONGO_COLLECTION_MODELS,
     MONGO_COLLECTION_MONITORS,
 )
 from waterdip.server.db.repositories.alert_repository import AlertRepository
@@ -39,6 +40,10 @@ class TestAlertService:
         cls.model_id = uuid.uuid4()
         cls.monitor_id = uuid.uuid4()
         cls.monitor_name = "monitor_name"
+        cls.model = {
+            "model_id": str(cls.model_id),
+            "model_name": "test_model",
+        }
         cls.alerts = [
             BaseAlertDB(
                 monitor_type=MonitorType.DRIFT,
@@ -112,6 +117,7 @@ class TestAlertService:
         cls.mock_mongo_backend.database[MONGO_COLLECTION_MONITORS].insert_one(
             cls.monitor
         )
+        cls.mock_mongo_backend.database[MONGO_COLLECTION_MODELS].insert_one(cls.model)
 
     def test_should_get_alerts(self, mocker):
         model_ids = [uuid.uuid4(), uuid.uuid4()]
@@ -184,3 +190,5 @@ class TestAlertService:
     @classmethod
     def teardown_class(cls):
         cls.mock_mongo_backend.database[MONGO_COLLECTION_ALERTS].drop()
+        cls.mock_mongo_backend.database[MONGO_COLLECTION_MONITORS].drop()
+        cls.mock_mongo_backend.database[MONGO_COLLECTION_MODELS].drop()
