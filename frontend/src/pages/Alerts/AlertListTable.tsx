@@ -26,6 +26,7 @@ import '../../pages/Models/ModelList/shadow.css';
 import { fontWeight } from '@material-ui/system';
 import { useSelector } from '../../redux/store';
 import { usePaginatedAlerts } from '../../api/alerts/GetAlerts';
+import { formatDateTime, formattedDate, formattedDateTime } from 'utils/date';
 
 interface AlertColumn {
   id: 'severity' | 'status' | 'time' | 'monitorName' | 'monitorType' | 'name' | 'action';
@@ -187,7 +188,7 @@ const AlertListTable = ({ value }: modelProps) => {
     limit: rowsPerPage,
     sort: orderDirection.name === 'asc' ? 'name_asc' : 'name_desc'
   });
-  const alertList = data?.alertList || [];
+  const alertList = data?.data?.model_list || [];
   const meta = data?.meta || { page: 0, total: 0, limit: 10, sort: 'name_asc' };
 
   const classes = useStyles();
@@ -280,17 +281,17 @@ const AlertListTable = ({ value }: modelProps) => {
                         {row.status}
                       </TableCell>
                       <TableCell className={classes.tableCell} align="center">
-                        {row.time}
+                        {formattedDateTime(row.created_at)}
                       </TableCell>
                       <TableCell className={classes.tableCell} align="center">
-                        {row.monitorName}
+                        {row.monitor_name}
                       </TableCell>
                       <TableCell className={classes.tableCell} align="center">
-                        {row.monitorMethod}
+                        {row.monitor_type}
                       </TableCell>
                       {value !== 'Model' ? (
                         <TableCell className={classes.tableCell} align="center">
-                          {row.modelId}
+                          {row.model_name}
                         </TableCell>
                       ) : null}
                       <TableCell

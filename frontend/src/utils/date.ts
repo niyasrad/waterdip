@@ -10,6 +10,8 @@ export const formatDateTime = (d: Date) => {
   return `${mo} ${da} ${ye}`;
 };
 
+export const formattedDateTime = (str: string) => new Date(str).toString().slice(0,25);
+
 export const formattedDate = (date: string) => {
   const months = [
     'Jan',

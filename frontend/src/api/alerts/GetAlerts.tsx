@@ -22,7 +22,7 @@ interface GetAlertsParams {
 }
 
 interface GetAlertsResponse {
-  alert_list: ApiAlertsList[];
+  model_list: ApiAlertsList[];
   meta: AlertsListMeta;
 }
 
@@ -51,19 +51,7 @@ export const usePaginatedAlerts: UsePaginatedAlerts = (params) => {
   async function queryAlerts() {
     const response = await axios.get<GetAlertsResponse>(GET_ALERTS_API, { params });
 
-    const { alert_list, meta } = response.data;
-
-    const alertList = alert_list.map(
-      (alert: ApiAlertsList): AlertsListRow => ({
-        monitorId: alert.monitor_id,
-        monitorName: alert.monitor_name,
-        monitorMethod: alert.monitor_method,
-        modelId: alert.model_id,
-        severity: alert.severity,
-        status: alert.status,
-        time: alert.time
-      })
-    );
+    const { model_list, meta } = response.data;
 
     const AlertsListMeta: AlertsListMeta = {
       page: meta?.page || 1,
@@ -75,7 +63,7 @@ export const usePaginatedAlerts: UsePaginatedAlerts = (params) => {
 
     return {
       ...response,
-      alertList,
+      model_list,
       meta: AlertsListMeta
     };
   }

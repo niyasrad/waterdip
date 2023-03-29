@@ -26,4 +26,4 @@ export const CREATE_MONITOR_API = makeUrl('monitor.create');
 export const GET_MONITORS_API = makeUrl('list.monitors');
 export const DELETE_MONITOR_API = makeUrl('monitor.delete');
 
-export const GET_ALERTS_API = makeUrl('list.incidents');
+export const GET_ALERTS_API = makeUrl('list.alerts');

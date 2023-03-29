@@ -534,8 +534,6 @@ const ModelOverview = () => {
                           </TableCell>
                           <TableCell className={classes.tableCell} align="center">
                             {formatDateTime(rowData.time)}
-                            {formattedDate(rowData.time)}
-                            {rowData.time}
                           </TableCell>
                         </TableRow>
                       ))}
