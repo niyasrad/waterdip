@@ -34,7 +34,8 @@ export default {
     },
     actions: {
       monitor_name: '',
-      severity: ''
+      severity: '',
+      integration_id: null
     },
     logicEvaluations: {}
   },

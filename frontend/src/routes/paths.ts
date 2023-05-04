@@ -24,7 +24,8 @@ export const PATH_DASHBOARD = {
     modelDetails: (modelId: string, versionId: string) => path(ROOTS_MODELS(modelId), `/`),
     monitors: path(ROOTS_DASHBOARD, '/monitors'),
     monitorCreate: path(ROOTS_DASHBOARD, '/monitors/create'),
-    alerts: path(ROOTS_DASHBOARD, '/alerts')
+    alerts: path(ROOTS_DASHBOARD, '/alerts'),
+    integrations: path(ROOTS_DASHBOARD, '/integrations')
     // members: path(ROOTS_DASHBOARD, '/members')
   }
 };

@@ -11,6 +11,7 @@ import LoadingScreen from '../components/LoadingScreen';
 import MonitorList from 'pages/Monitors/MonitorList/MonitorList';
 import MonitorCreate from 'pages/Monitors/MonitorCreate/MonitorCreate';
 import AlertList from 'pages/Alerts/AlertList';
+import IntegrationDashboard from 'pages/Integrations/IntegrationDashboard';
 
 // ----------------------------------------------------------------------
 
@@ -71,6 +72,12 @@ export default function Router() {
         {
           path: 'alerts',
           children: [{ path: '/', element: <AlertList /> }]
+        },
+        {
+          path: 'integrations',
+          children: [
+            { path: '/', element: <IntegrationDashboard />}
+          ]
         }
         // { path: 'members', element: <Members /> }
       ]

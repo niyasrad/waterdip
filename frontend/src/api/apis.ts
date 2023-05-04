@@ -27,3 +27,7 @@ export const GET_MONITORS_API = makeUrl('list.monitors');
 export const DELETE_MONITOR_API = makeUrl('monitor.delete');
 
 export const GET_ALERTS_API = makeUrl('list.alerts');
+
+export const ADD_INTEGRATION_API = makeUrl('integration.add')
+export const DELETE_INTEGRATION_API = makeUrl('integration.delete')
+export const GET_INTEGRATIONS_API = makeUrl('integration.list')

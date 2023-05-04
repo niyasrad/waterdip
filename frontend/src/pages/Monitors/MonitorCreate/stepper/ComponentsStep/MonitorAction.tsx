@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 import { styled } from '@mui/material/styles';
-import { Box, TextField } from '@mui/material';
+import { Autocomplete, Box, TextField } from '@mui/material';
 import TextareaAutosize from '@mui/base/TextareaAutosize';
 import { colors } from '../../../../../theme/colors';
 import { useFormikContext } from 'formik';
+import { UseGetIntegration } from 'api/integrations/GetIntegrations';
 
 const PREFIX = 'MonitorAction';
 
@@ -13,6 +14,7 @@ const classes = {
   actionInputContent: `${PREFIX}-actionInputContent`,
   label: `${PREFIX}-label`,
   desc: `${PREFIX}-desc`,
+  select: `${PREFIX}-select`,
   txtInp: `${PREFIX}-txtInp`
 };
 
@@ -104,13 +106,20 @@ const MonitorAction = () => {
 
   const [monitorName, setmonitorName] = useState<string>();
   const [severityValue, setseverityValue] = useState<string>('MEDIUM');
+  const [integrationID, setIntegrationID] = useState<string | null>(null);
+
   const handleRadioChange = (e: any) => {
     setseverityValue(e.target.value);
   };
+
+  const { data } = UseGetIntegration()
+  const integrationList = data?.data || []; 
+
   useEffect(() => {
     formikProps.setFieldValue('actions.monitor_name', monitorName);
     formikProps.setFieldValue('actions.severity', severityValue);
-  }, [monitorName, severityValue]);
+    formikProps.setFieldValue('actions.integration_id', integrationID)
+  }, [monitorName, severityValue, integrationID]);
   return (
     (<Root>
       <Box className={classes.actionInput}>
@@ -142,14 +151,27 @@ const MonitorAction = () => {
         />
       </Box>
       <Box className={classes.actionInput}>
+          <Box className={classes.actionInputTitle}>Alerts Integration</Box>
+          <Autocomplete
+            disablePortal
+            id="combo-box-demo"
+            options={integrationList}
+            onChange={ (e,v) => setIntegrationID(v && v.integration_id ? v.integration_id : null )}
+            sx={{ 
+              width: 350,
+              paddingTop: 2
+            }}
+            getOptionLabel={(option) => option.app_name}
+            renderInput={(params) => <TextField {...params} label="Select Integration" />}
+          />
+      </Box>
+      <Box className={classes.actionInput}>
         <Box className={classes.actionInputTitle}>Description</Box>
         <TextareaAutosize
           aria-label="empty textarea"
           placeholder="Type Here..."
           className={classes.desc} 
-          nonce={undefined} 
-          onResize={undefined}
-          onResizeCapture={undefined}        />
+        />
       </Box>
     </Root>)
   );

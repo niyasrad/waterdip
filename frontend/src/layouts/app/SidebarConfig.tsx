@@ -29,7 +29,8 @@ const getIcon = (name: string) => (
 const ICONS = {
   grid: getIcon('grid'),
   layers: getIcon('layers'),
-  alert_octagon: getIcon('alert-octagon')
+  alert_octagon: getIcon('alert-octagon'),
+  codesandbox: getIcon('codesandbox')
 };
 
 const sidebarConfig = [
@@ -40,7 +41,8 @@ const sidebarConfig = [
     items: [
       { title: 'Grid', path: PATH_DASHBOARD.general.models, icon: ICONS.grid },
       { title: 'Layers', path: PATH_DASHBOARD.general.monitors, icon: ICONS.layers },
-      { title: 'Alert Octagon', path: PATH_DASHBOARD.general.alerts, icon: ICONS.alert_octagon }
+      { title: 'Alert Octagon', path: PATH_DASHBOARD.general.alerts, icon: ICONS.alert_octagon },
+      { title: 'Codesandbox', path: PATH_DASHBOARD.general.integrations, icon: ICONS.codesandbox }
     ]
   }
 

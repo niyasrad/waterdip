@@ -122,7 +122,8 @@ export default function VerticalLinearStepper({ monitorType, model_id, model_ver
           },
           "evaluation_window": values.monitor_condition.evaluation_window,
         },
-        "severity": values.actions.severity
+        "severity": values.actions.severity,
+        "integration_id": values.actions.integration_id
       }
       mutation.mutate(value, {
         onSuccess: () => {
