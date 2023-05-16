@@ -1,7 +1,7 @@
 import { forwardRef } from 'react';
 // material
-import { alpha, useTheme } from '@material-ui/core/styles';
-import { IconButton, IconButtonProps } from '@material-ui/core';
+import { alpha, useTheme } from '@mui/material/styles';
+import { IconButton, IconButtonProps } from '@mui/material';
 //
 import { ButtonAnimate } from '../animate';
 
@@ -31,7 +31,7 @@ const MIconButton = forwardRef<HTMLButtonElement, MIconButtonProps>(
     ) {
       return (
         <ButtonAnimate>
-          <IconButton ref={ref} color={color} sx={sx} {...other}>
+          <IconButton ref={ref} color={color} sx={sx} {...other} size="large">
             {children}
           </IconButton>
         </ButtonAnimate>
@@ -50,7 +50,7 @@ const MIconButton = forwardRef<HTMLButtonElement, MIconButtonProps>(
             ...sx
           }}
           {...other}
-        >
+          size="large">
           {children}
         </IconButton>
       </ButtonAnimate>

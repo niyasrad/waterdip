@@ -19,7 +19,6 @@ import { useQuery, UseQueryResult } from 'react-query';
 import { AxiosRequestConfig } from 'axios';
 import axios from '../../utils/axios';
 import { GET_DATASET_INFO_API } from '../apis';
-import { Optional } from 'react-wordcloud';
 import { paramCase } from 'change-case';
 const BASE_URL = process.env.REACT_APP_API_URL;
 

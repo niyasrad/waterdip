@@ -1,6 +1,7 @@
 import { ApexOptions } from 'apexcharts';
-import { createStyles } from '@material-ui/styles';
-import { useTheme, makeStyles } from '@material-ui/core/styles';
+import { createStyles } from '@mui/styles';
+import { useTheme } from '@mui/material/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import typography from '../../theme/typography';
 
 // ----------------------------------------------------------------------
@@ -13,7 +14,7 @@ const useStyles = makeStyles((theme) =>
         border: '0 !important',
         boxShadow: `${theme.customShadows.z24} !important`,
         color: `${theme.palette.text.primary} !important`,
-        borderRadius: `${theme.shape.borderRadiusSm}px !important`,
+        borderRadius: `${theme.shape.borderRadius}px !important`,
         backgroundColor: `${theme.palette.background.default} !important`
       },
       '.apexcharts-tooltip-title': {

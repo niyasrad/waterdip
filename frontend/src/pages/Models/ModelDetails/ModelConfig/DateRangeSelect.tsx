@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Select, MenuItem, TextField, Typography, Box } from '@material-ui/core';
-import { DateRange, DateRangePicker, LocalizationProvider } from '@material-ui/lab';
-import AdapterDateFns from '@material-ui/lab/AdapterDateFns';
+import { Select, MenuItem, TextField, Typography, Box, SelectChangeEvent } from '@mui/material';
+import { DateRange } from 'react-date-range';
+import 'react-date-range/dist/styles.css'; 
+import 'react-date-range/dist/theme/default.css'; 
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import { formatDateTime, computeDateRange } from '../../../../utils/date';
 import calendarFill from '@iconify/icons-eva/calendar-fill';
 import { Icon } from '@iconify/react';
-import ClickAwayListener from '@material-ui/core/ClickAwayListener';
+import ClickAwayListener from '@mui/material/ClickAwayListener';
 
 const timeDuration: Record<string, number> = {
   last5hours: 5 * 60 * 60 * 1000,
@@ -18,7 +20,13 @@ type Props = {
 };
 const DateTimePickerDropdown = ({ onSelect }: Props) => {
   const [selectValue, setSelectValue] = useState<string>('last5hours');
-  const [dRValue, setDRValue] = useState<DateRange<Date>>([null, null]);
+  const [dRValue, setDRValue] = useState([
+    {
+      startDate: null,
+      endDate: null,
+      key: 'selection'
+    }
+  ]);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [boxShow, setBoxShow] = useState(true);
   const handleClickAway = () => {
@@ -26,6 +34,10 @@ const DateTimePickerDropdown = ({ onSelect }: Props) => {
   };
 
   useEffect(() => {
+    if (selectValue === 'showpicker' && dRValue[0].startDate && dRValue[0].endDate)
+      if (dRValue[0].startDate !== dRValue[0].endDate) {
+        setShowDatePicker(false)
+      }
     if (selectValue === 'showpicker' && dRValue[0] && dRValue[1]) onSelect(dRValue, boxShow);
     else if (selectValue !== 'showpicker') {
       onSelect([new Date(new Date().getTime() - timeDuration[selectValue]), new Date()], boxShow);
@@ -40,7 +52,7 @@ const DateTimePickerDropdown = ({ onSelect }: Props) => {
     if (value !== 'showpicker' && dRValue[0] && dRValue[1]) {
       // when some other option selected from dropdown other showpicker,
       // reset the daterangevalue state
-      setDRValue([null, null]);
+      setDRValue([{ startDate: null, endDate: null, key: 'selection'}]);
     }
 
     if (value === 'last5hours') {
@@ -64,9 +76,9 @@ const DateTimePickerDropdown = ({ onSelect }: Props) => {
       )} to ${formatDateTime(now)} `;
       dateRange = '1M';
     } else if (value === 'showpicker') {
-      if (dRValue[0] && dRValue[1]) {
-        dateTimeString = `${formatDateTime(dRValue[0])} to ${formatDateTime(dRValue[1])} `;
-        dateRange = computeDateRange(dRValue[0], dRValue[1]);
+      if (dRValue[0].startDate && dRValue[0].endDate) {
+        dateTimeString = `${formatDateTime(dRValue[0].startDate!)} to ${formatDateTime(dRValue[0].endDate!)} `;
+        dateRange = computeDateRange(dRValue[0].startDate, dRValue[0].endDate);
       } else dateTimeString = 'Custom Date';
     }
     return (
@@ -108,7 +120,7 @@ const DateTimePickerDropdown = ({ onSelect }: Props) => {
         <Select
           id="date-range-select"
           value={selectValue}
-          onChange={(e: React.ChangeEvent<{ value: unknown }>) => {
+          onChange={(e: SelectChangeEvent<any>) => {
             setSelectValue(e.target.value as string);
             setBoxShow(false);
           }}
@@ -141,31 +153,21 @@ const DateTimePickerDropdown = ({ onSelect }: Props) => {
           <MenuItem value="lastmonth">Last month</MenuItem>
           <MenuItem value="showpicker">Custom Date</MenuItem>
         </Select>
-        <LocalizationProvider dateAdapter={AdapterDateFns}>
-          <DateRangePicker
-            open={showDatePicker}
-            onOpen={() => setDRValue([null, null])}
-            value={dRValue}
-            onChange={(newValue) => {
-              setDRValue(newValue);
-              setBoxShow(false);
-            }}
-            onAccept={() => setShowDatePicker(false)}
-            renderInput={(startProps) => (
-              <TextField
-                sx={{ display: 'none' }}
-                {...{
-                  ...startProps,
-                  inputProps: { ...startProps.inputProps, placeholder: '' },
-                  helperText: '',
-                  label: ''
-                }}
-              >
-                Custom Date
-              </TextField>
-            )}
-          />
-        </LocalizationProvider>
+        {
+          showDatePicker ?
+          <Box
+            sx={{ position: 'fixed', zIndex: 999, bottom: 0, top: 200 }}
+          >
+
+          <DateRange
+
+          ranges={dRValue}
+          onChange={(item: any) => {
+            setDRValue([item.selection])
+          }}
+        />
+          </Box> : null
+        }
       </Box>
     </ClickAwayListener>
   );

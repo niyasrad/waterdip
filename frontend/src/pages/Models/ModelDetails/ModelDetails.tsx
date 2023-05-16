@@ -1,7 +1,7 @@
 import { capitalCase } from 'change-case';
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
-import { Box, Container, Tab, Tabs, Grid } from '@material-ui/core';
+import { Box, Container, Tab, Tabs, Grid } from '@mui/material';
 import Page from '../../../components/Page';
 import { MHidden } from '../../../components/@material-extend';
 import ModelOverview from './ModelOverview/ModelOverview';

@@ -1,6 +1,6 @@
 import { motion, AnimatePresence } from 'framer-motion';
 // material
-import { Dialog, Box, Paper, DialogProps } from '@material-ui/core';
+import { Dialog, Box, Paper, DialogProps } from '@mui/material';
 //
 import { varFadeInUp } from './variants';
 

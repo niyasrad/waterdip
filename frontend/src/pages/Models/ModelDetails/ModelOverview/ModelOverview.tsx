@@ -13,13 +13,9 @@ import {
   Button,
   Switch,
   Stack
-} from '@material-ui/core';
-import {
-  experimentalStyled as styled,
-  useTheme,
-  makeStyles,
-  alpha
-} from '@material-ui/core/styles';
+} from '@mui/material';
+import { styled } from '@mui/material/styles';
+import { useTheme, alpha } from '@mui/material/styles';
 import { useParams } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 import { useModelOverview } from '../../../../api/models/GetModelOverview';
@@ -32,7 +28,7 @@ import { CardHeading, Heading } from '../../../../components/Heading';
 
 import { useSelector } from '../../../../redux/store';
 import { DateRangeFilterState } from '../../../../redux/slices/dateRangeFilter';
-import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
+import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import trendingUpFill from '@iconify/icons-eva/trending-up-fill';
 import trendingDownFill from '@iconify/icons-eva/trending-down-fill';
 import { formattedDate } from '../../../../utils/date';
@@ -41,6 +37,128 @@ import Scrollbar from 'components/Scrollbar';
 import downwardOutline from '@iconify/icons-eva/arrow-ios-downward-outline';
 
 import { colors } from '../../../../theme/colors';
+
+const PREFIX = 'ModelOverview';
+
+const classes = {
+  smallBox: `${PREFIX}-smallBox`,
+  BoxSubHeading: `${PREFIX}-BoxSubHeading`,
+  modelDetailDiv: `${PREFIX}-modelDetailDiv`,
+  divNumber: `${PREFIX}-divNumber`,
+  container: `${PREFIX}-container`,
+  tableHead: `${PREFIX}-tableHead`,
+  tableHeadCell: `${PREFIX}-tableHeadCell`,
+  tableCell: `${PREFIX}-tableCell`,
+  MenuText: `${PREFIX}-MenuText`
+};
+
+// TODO jss-to-styled codemod: The Fragment root was replaced by div. Change the tag if needed.
+const Root = styled('div')(() => ({
+  [`& .${classes.smallBox}`]: {
+    height: 'auto',
+    minHeight: '200px',
+    background: colors.white,
+    boxShadow: '0px 0.5px 1.75px rgba(0, 0, 0, 0.039), 0px 1.85px 6.25px rgba(0, 0, 0, 0.19)',
+    borderRadius: '4px',
+    marginRight: '20px',
+  },
+
+  [`& .${classes.BoxSubHeading}`]: {
+    fontFamily: 'Poppins',
+    fontStyle: 'normal',
+    fontWeight: 400,
+    fontSize: '.8rem',
+    lineHeight: '15px',
+    color: colors.text,
+    marginTop: '6px'
+  },
+
+  [`& .${classes.modelDetailDiv}`]: {
+    fontFamily: 'Poppins',
+    fontStyle: 'normal',
+    fontWeight: 300,
+    fontSize: '.8rem',
+    color: colors.textLight,
+    marginTop: '6px'
+  },
+
+  [`& .${classes.divNumber}`]: {
+    fontFamily: 'Poppins',
+    fontStyle: 'normal',
+    fontWeight: 400,
+    fontSize: '34px',
+    color: colors.text
+  },
+
+  [`& .${classes.container}`]: {
+    maxWidth: '100%',
+    maxHeight: '270px',
+    overflowX: 'hidden',
+    borderWidth: '1px',
+    borderStyle: 'solid',
+    borderColor: colors.tableHeadBack,
+    borderRadius: '4px'
+  },
+
+  [`& .${classes.tableHead}`]: {
+    root: {
+      backgroundColor: colors.black
+    },
+    borderRadius: '4px',
+    opacity: 1,
+    height: '24px',
+    fontFamily: 'Poppins',
+    fontStyle: 'normal',
+    fontWeight: 500,
+    fontSize: '12px'
+  },
+
+  [`& .${classes.tableHeadCell}`]: {
+    root: {
+      backgroundColor: colors.black
+    },
+    height: '24px',
+    fontFamily: 'Poppins',
+    fontStyle: 'normal',
+    fontWeight: 600,
+    fontSize: '12px',
+    lineHeight: '22px',
+    paddingTop: '3px',
+    paddingBottom: '3px',
+    color: colors.text,
+    boxShadow: 'none !important',
+    borderRadius: '0px !important',
+    '&:first-child': { borderTopLeftRadius: '4px !important' },
+    '&:last-child': { borderTopRightRadius: '4px !important' }
+  },
+
+  [`& .${classes.tableCell}`]: {
+    height: '24px',
+    borderRightWidth: '1px',
+    borderRightStyle: 'solid',
+    borderRightColor: colors.tableHeadBack,
+    fontFamily: 'Poppins',
+    fontStyle: 'normal',
+    fontWeight: 400,
+    fontSize: '11px',
+    color: colors.text,
+    paddingTop: '3px',
+    paddingBottom: '3px',
+    '&:last-child': {
+      borderRight: 0
+    }
+  },
+
+  [`& .${classes.MenuText}`]: {
+    fontFamily: 'Poppins',
+    fontStyle: 'normal',
+    fontWeight: 500,
+    fontSize: '.8rem',
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'space-between'
+  }
+}));
 
 const StyledMenu = styled((props: MenuProps) => (
   <Menu
@@ -87,106 +205,6 @@ const IconWrapperStyle = styled('div')(({ theme }) => ({
   backgroundColor: alpha(theme.palette.success.main, 0.16)
 }));
 
-const useStyles = makeStyles(() => ({
-  smallBox: {
-    height: 'auto',
-    minHeight: '200px',
-    background: colors.white,
-    boxShadow: '0px 0.5px 1.75px rgba(0, 0, 0, 0.039), 0px 1.85px 6.25px rgba(0, 0, 0, 0.19)',
-    borderRadius: '4px',
-    marginRight: '20px',
-  },
-
-  BoxSubHeading: {
-    fontFamily: 'Poppins',
-    fontStyle: 'normal',
-    fontWeight: 400,
-    fontSize: '.8rem',
-    lineHeight: '15px',
-    color: colors.text,
-    marginTop: '6px'
-  },
-  modelDetailDiv: {
-    fontFamily: 'Poppins',
-    fontStyle: 'normal',
-    fontWeight: 300,
-    fontSize: '.8rem',
-    color: colors.textLight,
-    marginTop: '6px'
-  },
-  divNumber: {
-    fontFamily: 'Poppins',
-    fontStyle: 'normal',
-    fontWeight: 400,
-    fontSize: '34px',
-    color: colors.text
-  },
-  container: {
-    maxWidth: '100%',
-    maxHeight: '270px',
-    overflowX: 'hidden',
-    borderWidth: '1px',
-    borderStyle: 'solid',
-    borderColor: colors.tableHeadBack,
-    borderRadius: '4px'
-  },
-  tableHead: {
-    root: {
-      backgroundColor: colors.black
-    },
-    borderRadius: '4px',
-    opacity: 1,
-    height: '24px',
-    fontFamily: 'Poppins',
-    fontStyle: 'normal',
-    fontWeight: 500,
-    fontSize: '12px'
-  },
-  tableHeadCell: {
-    root: {
-      backgroundColor: colors.black
-    },
-    height: '24px',
-    fontFamily: 'Poppins',
-    fontStyle: 'normal',
-    fontWeight: 600,
-    fontSize: '12px',
-    lineHeight: '22px',
-    paddingTop: '3px',
-    paddingBottom: '3px',
-    color: colors.text,
-    boxShadow: 'none !important',
-    borderRadius: '0px !important',
-    '&:first-child': { borderTopLeftRadius: '4px !important' },
-    '&:last-child': { borderTopRightRadius: '4px !important' }
-  },
-  tableCell: {
-    height: '24px',
-    borderRightWidth: '1px',
-    borderRightStyle: 'solid',
-    borderRightColor: colors.tableHeadBack,
-    fontFamily: 'Poppins',
-    fontStyle: 'normal',
-    fontWeight: 400,
-    fontSize: '11px',
-    color: colors.text,
-    paddingTop: '3px',
-    paddingBottom: '3px',
-    '&:last-child': {
-      borderRight: 0
-    }
-  },
-  MenuText: {
-    fontFamily: 'Poppins',
-    fontStyle: 'normal',
-    fontWeight: 500,
-    fontSize: '.8rem',
-    width: '100%',
-    display: 'flex',
-    justifyContent: 'space-between'
-  }
-}));
-
 interface ModelColumn {
   id: 'name' | 'type' | 'date';
   label: string;
@@ -215,7 +233,7 @@ const ModelOverview = () => {
     latestVersion: data ? data.data.latest_version.model_version.toUpperCase() : "V1",
     createTime: data ? formattedDate(data.data.latest_version_created_at) : '22 Dec 2022',
   }
-  const classes = useStyles();
+
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const [state, setState] = useState([]);
@@ -248,7 +266,7 @@ const ModelOverview = () => {
   const PERCENT1 = data?.data?.model_prediction_overview.pred_percentage_change;
   const PERCENT2 = data?.data?.model_alert_overview.alert_percentage_change;
   return (
-    <>
+    (<Root>
       <Grid container sx={{ flexGrow: 1 }}>
         <Grid item container spacing={3} xs={12} sx={{ maxWidth: '90%', alignItems: 'stretch' }}>
           <Grid item xs={12} sm={6} md={6} lg={3}>
@@ -545,7 +563,7 @@ const ModelOverview = () => {
           </Grid>
         </Grid>
       </Grid>
-    </>
+    </Root>)
   );
 };
 export default ModelOverview;

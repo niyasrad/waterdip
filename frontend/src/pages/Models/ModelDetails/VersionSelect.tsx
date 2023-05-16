@@ -1,14 +1,24 @@
 import { Heading } from "../../../components/Heading";
-import { makeStyles } from "@material-ui/styles";
-import { MenuItem } from "@material-ui/core";
+import { styled } from '@mui/material/styles';
+import { MenuItem } from "@mui/material";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { colors } from "../../../theme/colors";
 import { useEffect, useMemo, useState } from "react";
-import { Select } from "@material-ui/core";
+import { Select } from "@mui/material";
 import { useModelInfo } from "api/models/GetModelInfo";
 
-const useStyles = makeStyles({
-  select: {
+const PREFIX = 'VersionSelect';
+
+const classes = {
+  select: `${PREFIX}-select`,
+  baseLine: `${PREFIX}-baseLine`,
+  baseLineContent: `${PREFIX}-baseLineContent`,
+  contentHeading: `${PREFIX}-contentHeading`,
+  contentText: `${PREFIX}-contentText`
+};
+
+const Root = styled('div')({
+  [`& .${classes.select}`]: {
     marginTop: ".75rem",
     marginBottom: ".75rem",
     backgroundColor: `${colors.white} !important`,
@@ -28,10 +38,10 @@ const useStyles = makeStyles({
       borderColor: `${colors.text} !important`,
     },
   },
-  baseLine: {
+  [`&.${classes.baseLine}`]: {
     paddingLeft: ".8rem",
   },
-  baseLineContent: {
+  [`& .${classes.baseLineContent}`]: {
     marginTop: ".6rem",
     width: "100%",
     maxWidth: "250px",
@@ -40,13 +50,13 @@ const useStyles = makeStyles({
     borderRadius: "4px",
     padding: "1rem",
   },
-  contentHeading: {
+  [`& .${classes.contentHeading}`]: {
     fontSize: ".85rem",
     fontWeight: 600,
     letterSpacing: ".25px",
     marginBottom: ".5rem",
   },
-  contentText: {
+  [`& .${classes.contentText}`]: {
     fontSize: ".8rem",
     fontWeight: 500,
     letterSpacing: ".25px",
@@ -63,7 +73,7 @@ function useQuery() {
 export default function VersionSelect({ on_change, subtitle }: any) {
   const navigate = useNavigate();
   const { modelId, tabName } = useParams();
-  const classes = useStyles();
+
   const query = useQuery();
 
   const [selected, setSelected] = useState(query.get("version_id"));
@@ -77,7 +87,7 @@ export default function VersionSelect({ on_change, subtitle }: any) {
     setSelected(event.target.value);
   };
   return (
-    <div className={classes.baseLine}>
+    <Root className={classes.baseLine}>
       <Heading
         heading="Model Version"
         subtitle={subtitle}
@@ -102,6 +112,6 @@ export default function VersionSelect({ on_change, subtitle }: any) {
             ))}
         </Select>
       </div>
-    </div>
+    </Root>
   );
 }

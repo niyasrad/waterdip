@@ -1,4 +1,4 @@
-import { alpha, Theme } from '@material-ui/core/styles';
+import { alpha, Theme } from '@mui/material/styles';
 
 // ----------------------------------------------------------------------
 
@@ -8,7 +8,7 @@ export default function Pickers(theme: Theme) {
       styleOverrides: {
         paper: {
           boxShadow: theme.customShadows.z24,
-          borderRadius: theme.shape.borderRadiusMd
+          borderRadius: theme.shape.borderRadius
         }
       }
     },
@@ -17,7 +17,7 @@ export default function Pickers(theme: Theme) {
       styleOverrides: {
         root: {
           overflow: 'hidden',
-          borderRadius: theme.shape.borderRadiusMd,
+          borderRadius: theme.shape.borderRadius,
           '& .PrivatePickersToolbar-root': {
             color: theme.palette.common.white,
             backgroundColor: theme.palette.primary.main,
@@ -50,7 +50,7 @@ export default function Pickers(theme: Theme) {
       styleOverrides: {
         root: {
           border: `solid 1px ${theme.palette.divider}`,
-          borderRadius: theme.shape.borderRadiusMd
+          borderRadius: theme.shape.borderRadius
         }
       }
     }

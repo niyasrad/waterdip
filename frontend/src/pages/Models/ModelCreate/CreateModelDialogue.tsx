@@ -1,22 +1,34 @@
-import { Box, TextField, Button } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { Box, TextField, Button } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import { colors } from '../../../theme/colors';
 import { useState } from 'react';
 import { UseModelCreate } from '../../../api/models/CreateModel';
 import { PATH_DASHBOARD } from '../../../routes/paths';
 import { useNavigate } from 'react-router-dom';
 
-const useStyles = makeStyles(() => ({
-  addModelDialogue: {
+const PREFIX = 'CreateModelDialogue';
+
+const classes = {
+  addModelDialogue: `${PREFIX}-addModelDialogue`,
+  dialogueHeading: `${PREFIX}-dialogueHeading`,
+  dialogueInput: `${PREFIX}-dialogueInput`,
+  buttonBox: `${PREFIX}-buttonBox`,
+  dialogueButton: `${PREFIX}-dialogueButton`
+};
+
+const StyledBox = styled(Box)(() => ({
+  [`&.${classes.addModelDialogue}`]: {
     padding: '1.6rem'
   },
-  dialogueHeading: {
+
+  [`& .${classes.dialogueHeading}`]: {
     fontSize: '.8rem',
     fontWeight: 500,
     color: colors.text,
     marginBottom: '.5rem'
   },
-  dialogueInput: {
+
+  [`& .${classes.dialogueInput}`]: {
     transform: 'scale(1,.8)',
     '& .MuiInputBase-input': {
       transform: 'scale(1,1.2)',
@@ -32,8 +44,10 @@ const useStyles = makeStyles(() => ({
       }
     }
   },
-  buttonBox: { display: 'flex', justifyContent: 'flex-end', marginTop: '.7rem' },
-  dialogueButton: {
+
+  [`& .${classes.buttonBox}`]: { display: 'flex', justifyContent: 'flex-end', marginTop: '.7rem' },
+
+  [`& .${classes.dialogueButton}`]: {
     fontSize: '0.75rem',
     fontWeight: 600,
     letterSpacing: '0.01em',
@@ -48,7 +62,7 @@ const useStyles = makeStyles(() => ({
 
 const CreateModelDialogue = ({ handleClick, forceUpdate }: any) => {
   const [model, setModel] = useState('');
-  const classes = useStyles();
+
   const navigate = useNavigate();
 
   const addModelName = () => {
@@ -58,7 +72,7 @@ const CreateModelDialogue = ({ handleClick, forceUpdate }: any) => {
     forceUpdate();
   };
   return (
-    <Box className={classes.addModelDialogue}>
+    <StyledBox className={classes.addModelDialogue}>
       <Box className={classes.dialogueHeading}>Model Name</Box>
       <Box className={classes.dialogueInput}>
         <TextField
@@ -73,7 +87,7 @@ const CreateModelDialogue = ({ handleClick, forceUpdate }: any) => {
           Create Model
         </Button>
       </Box>
-    </Box>
+    </StyledBox>
   );
 };
 

@@ -1,11 +1,19 @@
-import { makeStyles } from '@material-ui/core/styles';
-import { Button, Tooltip } from '@material-ui/core';
+import { styled } from '@mui/material/styles';
+import { Button, Tooltip } from '@mui/material';
 import { Icon } from '@iconify/react';
 import infoOutline from '@iconify/icons-eva/info-outline';
 import { MIconButton } from './@material-extend';
 
-const useStyles = makeStyles({
-  heading: {
+const PREFIX = 'Heading';
+
+const classes = {
+  heading: `${PREFIX}-heading`,
+  cardheading: `${PREFIX}-cardheading`,
+  info: `${PREFIX}-info`
+};
+
+const Root = styled('div')({
+  [`&.${classes.heading}`]: {
     fontSize: '.9rem',
     fontWeight: 600,
     display: 'flex',
@@ -13,7 +21,7 @@ const useStyles = makeStyles({
     letterSpacing: '.25px',
     paddingBottom: '.6rem'
   },
-  cardheading: {
+  [`&.${classes.cardheading}`]: {
     fontSize: '.9rem',
     fontWeight: 500,
     display: 'flex',
@@ -22,7 +30,7 @@ const useStyles = makeStyles({
     paddingBottom: '.25rem',
     textTransform: 'uppercase'
   },
-  info: {}
+  [`& .${classes.info}`]: {}
 });
 
 type headingProps = {
@@ -31,9 +39,9 @@ type headingProps = {
 };
 
 export function Heading({ heading, subtitle }: headingProps) {
-  const classes = useStyles();
+
   return (
-    <div className={classes.heading}>
+    <Root className={classes.heading}>
       {heading}
       {subtitle && (
         <Tooltip title={subtitle} placement="right">
@@ -50,14 +58,14 @@ export function Heading({ heading, subtitle }: headingProps) {
           </MIconButton>
         </Tooltip>
       )}
-    </div>
+    </Root>
   );
 }
 export function CardHeading({ heading, subtitle }: headingProps) {
-  const classes = useStyles();
+
 
   return (
-    <div className={classes.cardheading}>
+    <Root className={classes.cardheading}>
       {heading}
       {subtitle && (
         <Tooltip title={subtitle} placement="right">
@@ -74,6 +82,6 @@ export function CardHeading({ heading, subtitle }: headingProps) {
           </MIconButton>
         </Tooltip>
       )}
-    </div>
+    </Root>
   );
 }

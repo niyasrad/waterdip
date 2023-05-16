@@ -1,14 +1,11 @@
 import { useEffect, ReactNode } from 'react';
-// rtl
-import rtl from 'jss-rtl';
-import { create } from 'jss';
 import rtlPlugin from 'stylis-plugin-rtl';
 // emotion
 import createCache from '@emotion/cache';
 import { CacheProvider } from '@emotion/react';
 // material
-import { StylesProvider, jssPreset } from '@material-ui/styles';
-import { useTheme } from '@material-ui/core/styles';
+import { StylesProvider } from '@mui/styles';
+import { useTheme } from '@mui/material/styles';
 
 // ----------------------------------------------------------------------
 
@@ -18,10 +15,6 @@ type RtlLayoutProps = {
 
 export default function RtlLayout({ children }: RtlLayoutProps) {
   const theme = useTheme();
-
-  const jss = create({
-    plugins: [...jssPreset().plugins, rtl()]
-  });
 
   useEffect(() => {
     document.dir = theme.direction;
@@ -38,7 +31,7 @@ export default function RtlLayout({ children }: RtlLayoutProps) {
 
   return (
     <CacheProvider value={cache}>
-      <StylesProvider jss={jss}>{children}</StylesProvider>
+      <StylesProvider>{children}</StylesProvider>
     </CacheProvider>
   );
 }

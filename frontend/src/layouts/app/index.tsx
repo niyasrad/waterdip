@@ -17,7 +17,7 @@
 
 import { useState } from 'react';
 import { Outlet } from 'react-router-dom';
-import { experimentalStyled as styled } from '@material-ui/core/styles';
+import { experimentalStyled as styled } from '@mui/material/styles';
 import DashboardNavbar from './DashboardNavbar';
 import DashboardSidebar from './DashboardSidebar';
 import { MHidden } from '../../components/@material-extend';

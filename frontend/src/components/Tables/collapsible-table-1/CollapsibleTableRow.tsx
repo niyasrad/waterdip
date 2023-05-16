@@ -1,4 +1,5 @@
 import { Icon } from '@iconify/react';
+import { styled } from '@mui/material/styles';
 import { useState } from 'react';
 import arrowIosUpwardFill from '@iconify/icons-eva/arrow-ios-upward-fill';
 import arrowIosDownwardFill from '@iconify/icons-eva/arrow-ios-downward-fill';
@@ -14,47 +15,57 @@ import {
   TableCell,
   Typography,
   IconButton
-} from '@material-ui/core';
+} from '@mui/material';
 import { ChartBar } from 'components/charts';
-import { makeStyles } from '@material-ui/core/styles';
 import { colors } from '../../../theme/colors';
 
-// ----------------------------------------------------------------------
+const PREFIX = 'CollapsibleTableRow';
 
-const useStyles = makeStyles(() => ({
-  openBack: {
-    backgroundColor: colors.boxBackground
+const classes = {
+  openBack: `${PREFIX}-openBack`,
+  pointer: `${PREFIX}-pointer`,
+  name: `${PREFIX}-name`,
+  impact: `${PREFIX}-impact`,
+  minMax: `${PREFIX}-minMax`
+};
+
+// TODO jss-to-styled codemod: The Fragment root was replaced by div. Change the tag if needed.
+const Root = styled(TableRow)(() => ({
+  width: '100%',
+  border: `1px solid ${colors.tableHeadBack}`, 
+  [`& .${classes.openBack}`]: {
+    backgroundColor: colors.boxBackground,
   },
-  pointer: {
+
+  [`& .${classes.pointer}`]: {
     '&:hover': {
       backgroundColor: colors.boxBackground,
       cursor: 'pointer'
     }
   },
-  name: {
+
+  [`& .${classes.name}`]: {
     textTransform: 'capitalize',
     fontWeight: 600,
     color: colors.textPrimary,
-    fontSize: '0.875rem'
+    fontSize: '0.875rem',
   },
-  impact: {
+
+  [`& .${classes.impact}`]: {
     fontWeight: 500,
     color: colors.text,
     fontSize: '0.8rem'
   },
-  minMax: { fontSize: '.75rem', fontWeight: 500 }
+
+  [`& .${classes.minMax}`]: { fontSize: '.75rem', fontWeight: 500 }
 }));
 
 export default function CollapsibleTableRow(props: { row: any }) {
-  const classes = useStyles();
+
   const { row } = props;
 
   return (
-    <>
-      <TableRow
-        sx={{ border: `1px solid ${colors.tableHeadBack}`, borderBottom: 0 }}
-        className= "borderBottom"
-      >
+    (<Root>
         <TableCell className={classes.name}>
           &nbsp;
           {row.name}
@@ -63,7 +74,6 @@ export default function CollapsibleTableRow(props: { row: any }) {
         <TableCell align="center" width="20%">
           {Math.round(row.driftscore * 1000) / 1000}
         </TableCell>
-      </TableRow>
-    </>
+    </Root>)
   );
 }

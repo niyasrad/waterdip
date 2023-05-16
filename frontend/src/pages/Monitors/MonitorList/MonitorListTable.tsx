@@ -1,9 +1,10 @@
 import { useEffect, useState, useReducer } from 'react';
+import { styled } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
 import { useQuery, UseQueryResult } from 'react-query';
 import axios from '../../../utils/axios';
 import { GET_MONITORS_API } from '../../../api/apis';
-import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import { useSnackbar } from 'notistack';
 import {
   Table,
@@ -19,19 +20,201 @@ import {
   Button,
   CircularProgress,
   Switch
-} from '@material-ui/core';
+} from '@mui/material';
 import { capitalize } from 'lodash';
-import { makeStyles } from '@material-ui/core/styles';
 import Scrollbar from '../../../components/Scrollbar';
 import { colors } from '../../../theme/colors';
 import '../../../pages/Models/ModelList/shadow.css';
 import MonitorListToolbar from './MonitorListToolbar';
-import { fontWeight } from '@material-ui/system';
+import { fontWeight } from '@mui/system';
 import { useSelector } from '../../../redux/store';
 import { ModelMonitorState } from '../../../redux/slices/ModelMonitorState';
 import { useGetMonitors } from 'api/monitors/GetMonitors';
 import { useMonitorDelete } from 'api/monitors/deleteMonitor';
 import { formattedDate } from 'utils/date';
+
+const PREFIX = 'MonitorListTable';
+
+const classes = {
+  card: `${PREFIX}-card`,
+  tableContainer: `${PREFIX}-tableContainer`,
+  table: `${PREFIX}-table`,
+  tableHeading: `${PREFIX}-tableHeading`,
+  tableHead: `${PREFIX}-tableHead`,
+  tableHeadCell: `${PREFIX}-tableHeadCell`,
+  tableRow: `${PREFIX}-tableRow`,
+  tableCell: `${PREFIX}-tableCell`,
+  pagination: `${PREFIX}-pagination`,
+  actionBtn: `${PREFIX}-actionBtn`,
+  popupBox: `${PREFIX}-popupBox`,
+  icon: `${PREFIX}-icon`,
+  actionPopup: `${PREFIX}-actionPopup`,
+  actionPopupBtn: `${PREFIX}-actionPopupBtn`,
+  severnityText: `${PREFIX}-severnityText`,
+  low: `${PREFIX}-low`,
+  medium: `${PREFIX}-medium`,
+  high: `${PREFIX}-high`
+};
+
+const StyledButton = styled(Button)({
+  padding: '.5rem 2rem',
+    borderRadius: '4px',
+    color: colors.textLight,
+    fontWeight: 500,
+    // borderBottom: `1px solid ${colors.textLight}`,
+    '&:last-child': {
+      borderBottom: 0
+    },
+    '& :hover': {
+      color: colors.textPrimary
+    }
+})
+const StyledBox = styled(Box)({
+  display: 'flex',
+  flexDirection: 'column',
+  borderRadius: '4px',
+});
+// TODO jss-to-styled codemod: The Fragment root was replaced by div. Change the tag if needed.
+const Root = styled('div')(() => ({
+  [`& .${classes.card}`]: {
+    backgroundColor: colors.white,
+    borderRadius: '10px',
+    marginBottom: '20px'
+  },
+
+  [`& .${classes.tableContainer}`]: {
+    width: '100%',
+    overflowX: 'hidden'
+  },
+
+  [`& .${classes.table}`]: {
+    width: '100%',
+    margin: 0
+  },
+
+  [`& .${classes.tableHeading}`]: {
+    width: '100%'
+  },
+
+  [`& .${classes.tableHead}`]: {
+    root: {
+      backgroundColor: colors.black
+    },
+    opacity: 1,
+    height: 40,
+    fontFamily: 'Poppins',
+    fontStyle: 'normal',
+    fontWeight: 600,
+    fontSize: '14px',
+    lineHeight: '22px'
+  },
+
+  [`& .${classes.tableHeadCell}`]: {
+    root: {
+      backgroundColor: colors.black
+    },
+    backgroundColor: colors.tableHeadBack,
+    height: 40,
+    fontFamily: 'Poppins',
+    fontStyle: 'normal',
+    fontWeight: 600,
+    fontSize: '14px',
+    lineHeight: '22px',
+    color: colors.text,
+    boxShadow: 'none !important',
+    borderBottomLeftRadius: '0px !important',
+    borderBottomRightRadius: '0px !important'
+  },
+
+  [`& .${classes.tableRow}`]: {
+    borderBottom: `1.1px solid ${colors.tableHeadBack}`
+  },
+
+  [`& .${classes.tableCell}`]: {
+    height: 40,
+    borderRightWidth: '1px',
+    borderRightStyle: 'solid',
+    borderRightColor: colors.tableHeadBack,
+    fontFamily: 'Poppins',
+    fontStyle: 'normal',
+    fontWeight: 400,
+    fontSize: '14px',
+    lineHeight: '22px',
+    color: colors.text,
+    '&:last-child': {
+      borderRight: 0
+    }
+  },
+
+  [`& .${classes.pagination}`]: {
+    fontFamily: 'Public Sans',
+    fontStyle: 'normal',
+    fontWeight: 400,
+    fontSize: '14px',
+    lineHeight: '22px',
+    color: colors.text
+  },
+
+  [`& .${classes.actionBtn}`]: {
+    padding: 0,
+    margin: 0,
+    color: colors.textLight,
+    '& :hover': {
+      backgroundColor: 'rgba(103, 128, 220, 0.2)',
+      color: colors.textPrimary,
+      borderRadius: '4px'
+    },
+    borderRadius: '4px',
+    letterSpacing: 3.6,
+    fontWeight: 900
+  },
+
+  [`& .${classes.popupBox}`]: {
+    ['& .MuiPopover-paper']: {
+      borderRadius: '4px !important'
+    },
+    borderRadius: '4px !important'
+  },
+
+  [`& .${classes.icon}`]: {
+    '&:hover': {
+      backgroundColor: 'transparent'
+    }
+  },
+
+  [`& .${classes.actionPopup}`]: {
+    display: 'flex',
+    flexDirection: 'column',
+    borderRadius: '4px'
+  },
+
+  [`& .${classes.actionPopupBtn}`]: {
+    padding: '.5rem 2rem',
+    borderRadius: '4px',
+    color: colors.textLight,
+    fontWeight: 500,
+    // borderBottom: `1px solid ${colors.textLight}`,
+    '&:last-child': {
+      borderBottom: 0
+    },
+    '& :hover': {
+      color: colors.textPrimary
+    }
+  },
+
+  [`& .${classes.severnityText}`]: {
+    display: 'inline-block',
+    padding: '.25rem .85rem',
+    fontSize: '.8rem',
+    fontWeight: 500,
+    color: colors.text,
+    borderRadius: '4px'
+  },
+
+  [`& .${classes.low}`]: { background: colors.low },
+  [`& .${classes.medium}`]: { background: colors.medium },
+  [`& .${classes.high}`]: { background: colors.high }
+}));
 
 interface ModelColumn {
   id: 'name' | 'type' | 'modelName' | 'date' | 'lastRun' | 'severity' | 'number' | 'action';
@@ -51,128 +234,6 @@ const MODEL_COLUMNS: ModelColumn[] = [
   { id: 'number', label: 'No. of alerts', minWidth: 50, span: 1, align: 'center' },
   { id: 'action', label: 'Action', minWidth: 50, span: 1, align: 'center' }
 ];
-const useStyles = makeStyles(() => ({
-  card: {
-    backgroundColor: colors.white,
-    borderRadius: '10px',
-    marginBottom: '20px'
-  },
-  tableContainer: {
-    width: '100%',
-    overflowX: 'hidden'
-  },
-  table: {
-    width: '100%',
-    margin: 0
-  },
-  tableHeading: {
-    width: '100%'
-  },
-  tableHead: {
-    root: {
-      backgroundColor: colors.black
-    },
-    opacity: 1,
-    height: 40,
-    fontFamily: 'Poppins',
-    fontStyle: 'normal',
-    fontWeight: 600,
-    fontSize: '14px',
-    lineHeight: '22px'
-  },
-  tableHeadCell: {
-    root: {
-      backgroundColor: colors.black
-    },
-    backgroundColor: colors.tableHeadBack,
-    height: 40,
-    fontFamily: 'Poppins',
-    fontStyle: 'normal',
-    fontWeight: 600,
-    fontSize: '14px',
-    lineHeight: '22px',
-    color: colors.text
-  },
-  tableRow: {
-    borderBottom: `1.1px solid ${colors.tableHeadBack}`
-  },
-  tableCell: {
-    height: 40,
-    borderRightWidth: '1px',
-    borderRightStyle: 'solid',
-    borderRightColor: colors.tableHeadBack,
-    fontFamily: 'Poppins',
-    fontStyle: 'normal',
-    fontWeight: 400,
-    fontSize: '14px',
-    lineHeight: '22px',
-    color: colors.text,
-    '&:last-child': {
-      borderRight: 0
-    }
-  },
-  pagination: {
-    fontFamily: 'Public Sans',
-    fontStyle: 'normal',
-    fontWeight: 400,
-    fontSize: '14px',
-    lineHeight: '22px',
-    color: colors.text
-  },
-  actionBtn: {
-    padding: 0,
-    margin: 0,
-    color: colors.textLight,
-    '& :hover': {
-      backgroundColor: 'rgba(103, 128, 220, 0.2)',
-      color: colors.textPrimary,
-      borderRadius: '4px'
-    },
-    borderRadius: '4px',
-    letterSpacing: 3.6,
-    fontWeight: 900
-  },
-  popupBox: {
-    '& .css-1p14d49-MuiPaper-root-MuiPopover-paper': {
-      borderRadius: '4px !important'
-    },
-    borderRadius: '4px !important'
-  },
-  icon: {
-    '&:hover': {
-      backgroundColor: 'transparent'
-    }
-  },
-  actionPopup: {
-    display: 'flex',
-    flexDirection: 'column',
-    borderRadius: '4px'
-  },
-  actionPopupBtn: {
-    padding: '.5rem 2rem',
-    borderRadius: '4px',
-    color: colors.textLight,
-    fontWeight: 500,
-    // borderBottom: `1px solid ${colors.textLight}`,
-    '&:last-child': {
-      borderBottom: 0
-    },
-    '& :hover': {
-      color: colors.textPrimary
-    }
-  },
-  severnityText: {
-    display: 'inline-block',
-    padding: '.25rem .85rem',
-    fontSize: '.8rem',
-    fontWeight: 500,
-    color: colors.text,
-    borderRadius: '4px'
-  },
-  low: { background: colors.low },
-  medium: { background: colors.medium },
-  high: { background: colors.high }
-}));
 
 interface SortProps {
   monitor_name: 'asc' | 'desc' | undefined;
@@ -224,7 +285,7 @@ const MonitorListTable = (props: any) => {
     refetch();
   }, [ignored, searchName, page, rowsPerPage])
 
-  const classes = useStyles();
+
 
   const { modelID } = useSelector(
     (state: { modelMonitorState: ModelMonitorState }) => state.modelMonitorState
@@ -265,7 +326,7 @@ const MonitorListTable = (props: any) => {
   const id = open ? 'simple-popover' : undefined;
 
   return (
-    <>
+    (<Root>
       <MonitorListToolbar searchName={searchName} onSearch={handleFilterByName} />
       <Card className={classes.card}>
         <Scrollbar>
@@ -365,11 +426,11 @@ const MonitorListTable = (props: any) => {
                           }}
                           className={classes.popupBox}
                         >
-                          <Box className={classes.actionPopup}>
-                            <Button className={classes.actionPopupBtn}>Disable</Button>
-                            <Button className={classes.actionPopupBtn}>Edit</Button>
-                            <Button onClick={() => handleDelete(row.monitor_id)} className={classes.actionPopupBtn}>Delete</Button>
-                          </Box>
+                          <StyledBox className={classes.actionPopup}>
+                            <StyledButton className={classes.actionPopupBtn}>Disable</StyledButton>
+                            <StyledButton className={classes.actionPopupBtn}>Edit</StyledButton>
+                            <StyledButton onClick={() => handleDelete(row.monitor_id)} className={classes.actionPopupBtn}>Delete</StyledButton>
+                          </StyledBox>
                         </Popover>
                       </TableCell>
                     </TableRow>
@@ -390,7 +451,7 @@ const MonitorListTable = (props: any) => {
           className={classes.pagination}
         />
       </Card>
-    </>
+    </Root>)
   );
 };
 

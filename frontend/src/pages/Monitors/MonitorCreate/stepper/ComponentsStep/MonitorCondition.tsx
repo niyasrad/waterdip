@@ -1,45 +1,64 @@
 import { useEffect, useState } from 'react';
-import { Box, Select, MenuItem, TextField, Button } from '@material-ui/core';
-import Autocomplete from '@material-ui/lab/Autocomplete';
-import { makeStyles } from '@material-ui/core/styles';
+import { styled } from '@mui/material/styles';
+import { Box, Select, MenuItem, TextField, Button, SelectChangeEvent } from '@mui/material';
+import Autocomplete from '@mui/material/Autocomplete';
 import { colors } from '../../../../../theme/colors';
 import { DialogAnimate } from '../../../../../components/animate';
 import { useFormikContext } from 'formik';
-import { fontSize } from '@material-ui/system';
+import { fontSize } from '@mui/system';
 import { useModelVersionInfo } from 'api/models/GetModelVersionInfo';
 
-const useStyles = makeStyles(() => ({
-  form: {
+const PREFIX = 'MonitorCondition';
+
+const classes = {
+  form: `${PREFIX}-form`,
+  contentInput: `${PREFIX}-contentInput`,
+  performData: `${PREFIX}-performData`,
+  contentInputLabel: `${PREFIX}-contentInputLabel`,
+  contentInputDesc: `${PREFIX}-contentInputDesc`,
+  contentInputSubDesc: `${PREFIX}-contentInputSubDesc`,
+  select: `${PREFIX}-select`,
+  numberInput: `${PREFIX}-numberInput`
+};
+
+const StyledBox = styled(Box)(() => ({
+  [`&.${classes.form}`]: {
     // display: 'flex'
   },
-  contentInput: {
+
+  [`& .${classes.contentInput}`]: {
     display: 'flex',
     flexDirection: 'column',
     margin: '0 0 1rem 0'
   },
-  performData: {
+
+  [`& .${classes.performData}`]: {
     marginTop: '.3rem',
     display: 'flex',
     alignItems: 'center'
   },
-  contentInputLabel: {
+
+  [`& .${classes.contentInputLabel}`]: {
     fontSize: '.9rem',
     color: colors.text,
     fontWeight: 600,
     marginBottom: '.4rem'
   },
-  contentInputDesc: {
+
+  [`& .${classes.contentInputDesc}`]: {
     fontSize: '.7rem',
     color: colors.textLight,
     fontWeight: 400,
     marginBottom: '.65rem'
   },
-  contentInputSubDesc: {
+
+  [`& .${classes.contentInputSubDesc}`]: {
     fontSize: '.75rem',
     color: colors.text,
     fontWeight: 600
   },
-  select: {
+
+  [`& .${classes.select}`]: {
     transform: 'scale(1,.6)',
     maxWidth: '20rem',
     minWidth: '10rem',
@@ -60,7 +79,8 @@ const useStyles = makeStyles(() => ({
       fontSize: '.8rem'
     }
   },
-  numberInput: {
+
+  [`& .${classes.numberInput}`]: {
     transform: 'scale(1,.6)',
     width: '5rem',
     '& .MuiInputBase-input': {
@@ -80,7 +100,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 const MonitorCondition = (props: any) => {
-  const classes = useStyles();
+
   const [expandForm, setExpandForm] = useState(false);
   const formikProps = useFormikContext();
   const { values }: any = formikProps;
@@ -111,7 +131,7 @@ const MonitorCondition = (props: any) => {
     formikProps.setFieldValue('monitor_condition.threshold.value', value);
   }, [props.monitorType, dimension, evaluationWindow, gtlt, value]);
   return (
-    <Box className={classes.form}>
+    <StyledBox className={classes.form}>
       {props.monitorType === 'Model Performance' && (
         <Box className={classes.contentInput}>
           <label className={classes.contentInputLabel}>Evaluation Metric</label>
@@ -124,7 +144,7 @@ const MonitorCondition = (props: any) => {
           <Select
             required
             className={classes.select}
-            onChange={(e: React.ChangeEvent<{ value: unknown }>) => {
+            onChange={(e: SelectChangeEvent<any>) => {
               setevaluationMetric(e.target.value as string);
             }}>
             <MenuItem value="PRECISION">Precision</MenuItem>
@@ -145,7 +165,7 @@ const MonitorCondition = (props: any) => {
           <Select
             required
             className={classes.select}
-            onChange={(e: React.ChangeEvent<{ value: unknown }>) => {
+            onChange={(e: SelectChangeEvent<any>) => {
               setevaluationMetric(e.target.value as string);
             }}>
             <MenuItem value="MISSING_VALUE">Missing Value</MenuItem>
@@ -166,7 +186,7 @@ const MonitorCondition = (props: any) => {
           <Select
             required
             className={classes.select}
-            onChange={(e: React.ChangeEvent<{ value: unknown }>) => {
+            onChange={(e: SelectChangeEvent<any>) => {
               setevaluationMetric(e.target.value as string);
             }}>
             <MenuItem value="PSI">PSI</MenuItem>
@@ -183,7 +203,7 @@ const MonitorCondition = (props: any) => {
           <Select
             required
             className={classes.select}
-            onChange={(e: React.ChangeEvent<{ value: unknown }>) => {
+            onChange={(e: SelectChangeEvent<any>) => {
               setFeatureOrPrediction(e.target.value as string);
               if(e.target.value==='feature') { setPrediction([])} else { setDimension([]) }
             }}>
@@ -254,7 +274,7 @@ const MonitorCondition = (props: any) => {
             <Select
               required
               className={classes.select}
-              onChange={(e: React.ChangeEvent<{ value: unknown }>) => {
+              onChange={(e: SelectChangeEvent<any>) => {
                 setGTLT(e.target.value as string);
               }}
             >
@@ -289,7 +309,7 @@ const MonitorCondition = (props: any) => {
             <Select
               required
               className={classes.select}
-              onChange={(e: React.ChangeEvent<{ value: unknown }>) => {
+              onChange={(e: SelectChangeEvent<any>) => {
                 setGTLT(e.target.value as string);
               }}
             >
@@ -325,7 +345,7 @@ const MonitorCondition = (props: any) => {
             <Select
               required
               className={classes.select}
-              onChange={(e: React.ChangeEvent<{ value: unknown }>) => {
+              onChange={(e: SelectChangeEvent<any>) => {
                 setGTLT(e.target.value as string);
               }}
             >
@@ -355,7 +375,7 @@ const MonitorCondition = (props: any) => {
         <Select
           required
           className={classes.select}
-          onChange={(e: React.ChangeEvent<{ value: unknown }>) => {
+          onChange={(e: SelectChangeEvent<any>) => {
             setevaluationWindow(e.target.value as string);
           }}
         >
@@ -364,7 +384,7 @@ const MonitorCondition = (props: any) => {
           <MenuItem value="31d">1 Month</MenuItem>
         </Select>
       </Box>
-    </Box>
+    </StyledBox>
   );
 };
 

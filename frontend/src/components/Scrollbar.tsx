@@ -1,7 +1,9 @@
 import SimpleBarReact, { Props } from 'simplebar-react';
 // material
-import { alpha, experimentalStyled as styled } from '@material-ui/core/styles';
-import { Box, BoxProps } from '@material-ui/core';
+import { alpha, experimentalStyled as styled } from '@mui/material/styles';
+import { Box, BoxProps } from '@mui/material';
+import { Ref, useRef } from 'react';
+import SimpleBarCore from 'simplebar-core';
 
 // ----------------------------------------------------------------------
 
@@ -34,10 +36,14 @@ const SimpleBarStyle = styled(SimpleBarReact)(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
+
+
 export default function Scrollbar({ children, sx, ...other }: BoxProps & Props) {
   const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
     navigator.userAgent
   );
+
+  const ref = useRef<SimpleBarCore>(null);
 
   if (isMobile) {
     return (
@@ -49,7 +55,7 @@ export default function Scrollbar({ children, sx, ...other }: BoxProps & Props) 
 
   return (
     <RootStyle>
-      <SimpleBarStyle timeout={500} clickOnTrack={false} sx={sx} {...other}>
+      <SimpleBarStyle clickOnTrack={false} sx={sx} {...other} ref={ref}>
         {children}
       </SimpleBarStyle>
     </RootStyle>

@@ -1,16 +1,28 @@
-import { makeStyles } from '@material-ui/styles';
-import { Box, Button, Tab, TextField, Tabs, Select, MenuItem, DialogActions } from '@material-ui/core';
+import { styled } from '@mui/material/styles';
+import { Box, Button, Tab, TextField, Tabs, Select, MenuItem, DialogActions } from '@mui/material';
 import { colors } from '../../../../theme/colors';
 import { useGetDatasetsInfo } from '../../../../api/datasets/GetDatasetInfo';
 import { useState, useEffect } from 'react';
-import { Data } from 'emoji-mart';
 import { string } from 'yup/lib/locale';
 import { useGetDatasets } from '../../../../api/datasets/GetDatasets';
 import { useSelector } from '../../../../redux/store';
 import { DateRangeFilterState } from '../../../../redux/slices/dateRangeFilter';
 import { useModelInfo } from '../../../../api/models/GetModelInfo';
-const useStyles = makeStyles({
-  select: {
+const PREFIX = 'DataProfileVersionCard';
+
+const classes = {
+  select: `${PREFIX}-select`,
+  conatinerHeading: `${PREFIX}-conatinerHeading`,
+  card: `${PREFIX}-card`,
+  cardHeading: `${PREFIX}-cardHeading`,
+  cardContent: `${PREFIX}-cardContent`,
+  cardEntry: `${PREFIX}-cardEntry`,
+  entryTitle: `${PREFIX}-entryTitle`,
+  entryContent: `${PREFIX}-entryContent`
+};
+
+const StyledBox = styled(Box)({
+  [`& .${classes.select}`]: {
     marginTop: '.75rem',
     marginBottom: '.75rem',
     backgroundColor: `${colors.white} !important`,
@@ -30,12 +42,12 @@ const useStyles = makeStyles({
       borderColor: `${colors.text} !important`
     }
   },
-  conatinerHeading: {
+  [`& .${classes.conatinerHeading}`]: {
     fontSize: '.9rem',
     color: colors.text,
     fontWeight: 500
   },
-  card: {
+  [`& .${classes.card}`]: {
     width: '100%',
     maxWidth: '360px',
     color: colors.text,
@@ -44,35 +56,35 @@ const useStyles = makeStyles({
     padding: '1rem',
     height: '160px'
   },
-  cardHeading: {
+  [`& .${classes.cardHeading}`]: {
     fontSize: '.85rem',
     fontWeight: 600,
     letterSpacing: '.25px',
     marginBottom: '.5rem'
   },
-  cardContent: {
+  [`& .${classes.cardContent}`]: {
     display: 'grid',
     gridTemplateColumns: 'repeat(2,1fr)',
     gridTemplateRows: 'repeat(3,1fr)',
     gridColumnGap: '1.5rem'
   },
-  cardEntry: {
+  [`&.${classes.cardEntry}`]: {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: '.6rem  0'
   },
-  entryTitle: { fontSize: '.62rem', fontWeight: 400, color: colors.text },
-  entryContent: { fontSize: '.62rem', fontWeight: 400, color: colors.textLight }
+  [`& .${classes.entryTitle}`]: { fontSize: '.62rem', fontWeight: 400, color: colors.text },
+  [`& .${classes.entryContent}`]: { fontSize: '.62rem', fontWeight: 400, color: colors.textLight }
 });
 
 const CardEntry = ({ title, value }: any) => {
-  const classes = useStyles();
+
   return (
-    <Box className={classes.cardEntry}>
+    <StyledBox className={classes.cardEntry}>
       <Box className={classes.entryTitle}>{title}</Box>
       <Box className={classes.entryContent}>{value}</Box>
-    </Box>
+    </StyledBox>
   );
 };
 
@@ -81,7 +93,7 @@ type Props = {
   on_change: Function;
 }
 export const DataProfileVersionCard = ({ model_id, on_change }: Props) => {
-  const classes = useStyles();
+
   const [selected, setSelected] = useState('');
   useEffect(() => { on_change(selected) }, [selected])
   const modelOverview = useModelInfo({
@@ -94,7 +106,7 @@ export const DataProfileVersionCard = ({ model_id, on_change }: Props) => {
   console.log(modelOverview)
 
   return (
-    <>
+    <StyledBox>
       <Box className={classes.card}>
         <Box className={classes.conatinerHeading}>Select Model Version</Box>
         {modelOverview && (
@@ -110,13 +122,13 @@ export const DataProfileVersionCard = ({ model_id, on_change }: Props) => {
           </Select>
         )}
       </Box>
-    </>
+    </StyledBox>
   );
 };
 
 export const DataDatasetSelectCard = (props: any) => {
 
-  const classes = useStyles();
+
   const [selected, setSelected] = useState('');
   const [selectedName, setSelectedName] = useState('');
   const handleChangeVersion = (event: any) => {
@@ -127,7 +139,7 @@ export const DataDatasetSelectCard = (props: any) => {
   const { data } = useGetDatasets({ version_id: props.version_id });
 
   return (
-    <>
+    <StyledBox>
       <Box className={classes.card}>
         <Box className={classes.conatinerHeading}>Select Dataset</Box>
         <Select defaultValue="select" className={classes.select} onChange={handleChangeVersion}>
@@ -147,13 +159,13 @@ export const DataDatasetSelectCard = (props: any) => {
           <Box className={classes.cardHeading}>Date from {props.dateTimeString}</Box>
         }
       </Box>
-    </>
+    </StyledBox>
   );
 };
 
 
 export const DataProfileOverviewCards = ({ datasetId }: any) => {
-  const classes = useStyles();
+
   const now = new Date();
   const { fromDate, toDate } = useSelector(
     (state: { dateRangeFilter: DateRangeFilterState }) => state.dateRangeFilter

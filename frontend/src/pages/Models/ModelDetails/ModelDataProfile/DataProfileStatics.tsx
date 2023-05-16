@@ -1,15 +1,17 @@
-import { makeStyles } from '@material-ui/styles';
-import { Box } from '@material-ui/core';
+import { styled } from '@mui/material/styles';
+import { Box } from '@mui/material';
 import { Heading } from '../../../../components/Heading';
 import CollapsibleTable from '../../../../components/Tables/collapsible-table-2';
 import { useGetMetricsDataset } from 'api/datasets/GetMetricsDataset';
 import { useSelector } from '../../../../redux/store';
 import { DateRangeFilterState } from '../../../../redux/slices/dateRangeFilter';
 
-const useStyles = makeStyles({});
+const PREFIX = 'DataProfileStats';
+const classes = {};
+const StyledBox = styled(Box)({});
 
 export const DataProfileStats = ({ datasetId, model_id, model_version_id }: any) => {
-  const classes = useStyles();
+
   const now = new Date();
   const { fromDate, toDate } = useSelector(
     (state: { dateRangeFilter: DateRangeFilterState }) => state.dateRangeFilter
@@ -23,7 +25,7 @@ export const DataProfileStats = ({ datasetId, model_id, model_version_id }: any)
   })
   const datasetInfo = data && data.data;
   return (
-    <Box sx={{ marginTop: '30px' }}>
+    <StyledBox sx={{ marginTop: '30px' }}>
       <Heading heading="Data Statistics" subtitle="Data Statistics for each columns" />
       {datasetInfo && datasetInfo.categorical_column_stats.length != 0 ?(
         <>
@@ -40,6 +42,6 @@ export const DataProfileStats = ({ datasetId, model_id, model_version_id }: any)
           <CollapsibleTable dataValue={datasetInfo.numeric_column_stats} data_type="NUMERIC" />
         </>
       ): null}
-    </Box>
+    </StyledBox>
   );
 };

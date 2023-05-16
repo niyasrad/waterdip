@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 // material
-import { Breakpoint, Theme, useMediaQuery } from '@material-ui/core';
+import { Breakpoint, Theme, useMediaQuery } from '@mui/material';
 
 // ----------------------------------------------------------------------
 

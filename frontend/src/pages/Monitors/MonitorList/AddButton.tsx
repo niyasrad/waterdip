@@ -1,13 +1,19 @@
 import { useState } from 'react';
+import { styled } from '@mui/material/styles';
 import { DialogAnimate } from '../../../components/animate';
-import { Box, Button } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import { Grid } from '@material-ui/core';
+import { Box, Button } from '@mui/material';
+import { Grid } from '@mui/material';
 import { colors } from '../../../theme/colors';
 import MonitorAddDialog from './MonitorAddDialog';
 
-const useStyles = makeStyles(() => ({
-  button_add: {
+const PREFIX = 'AddButton';
+
+const classes = {
+  button_add: `${PREFIX}-button_add`
+};
+
+const StyledBox = styled(Box)(() => ({
+  [`& .${classes.button_add}`]: {
     fontSize: '0.75rem',
     fontWeight: 600,
     letterSpacing: '0.01em',
@@ -21,25 +27,25 @@ const useStyles = makeStyles(() => ({
 }));
 
 const DialogBox = (props: any) => {
-  const classes = useStyles();
+
   const [boxDisplay, setBoxDisplay] = useState(true);
 
   return (
-    <>
+    <StyledBox>
       {boxDisplay === true ? (
         <>
           <MonitorAddDialog close={props.close}/>
         </>
       ) : null}
-    </>
+    </StyledBox>
   );
 };
 
 const AddButton = () => {
-  const classes = useStyles();
+
   const [expandForm, setExpandForm] = useState(false);
   return (
-    <Box>
+    <StyledBox>
       <Button
         className={classes.button_add}
         variant="contained"
@@ -50,7 +56,7 @@ const AddButton = () => {
       <DialogAnimate maxWidth="sm" open={expandForm} onClose={() => setExpandForm(false)}>
         <DialogBox close={() => setExpandForm(false)}/>
       </DialogAnimate>
-    </Box>
+    </StyledBox>
   );
 };
 

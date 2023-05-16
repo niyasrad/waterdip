@@ -1,24 +1,39 @@
 import { useEffect, useState } from 'react';
-import { Box, TextareaAutosize, TextField } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { styled } from '@mui/material/styles';
+import { Box, TextareaAutosize, TextField } from '@mui/material';
 import { colors } from '../../../../../theme/colors';
 import { useFormikContext } from 'formik';
 
-const useStyles = makeStyles(() => ({
-  reviewInput: {
+const PREFIX = 'MonitorReview';
+
+const classes = {
+  reviewInput: `${PREFIX}-reviewInput`,
+  reviewInputTitle: `${PREFIX}-reviewInputTitle`,
+  reviewInputContent: `${PREFIX}-reviewInputContent`,
+  label: `${PREFIX}-label`,
+  desc: `${PREFIX}-desc`,
+  txtInp: `${PREFIX}-txtInp`
+};
+
+// TODO jss-to-styled codemod: The Fragment root was replaced by div. Change the tag if needed.
+const Root = styled('div')(() => ({
+  [`& .${classes.reviewInput}`]: {
     margin: '0 0 1.8rem 0'
   },
-  reviewInputTitle: {
+
+  [`& .${classes.reviewInputTitle}`]: {
     fontSize: '.9rem',
     color: colors.text,
     fontWeight: 600,
     marginBottom: '.4rem'
   },
-  reviewInputContent: {
+
+  [`& .${classes.reviewInputContent}`]: {
     display: 'flex',
     flexDirection: 'column'
   },
-  label: {
+
+  [`& .${classes.label}`]: {
     display: 'flex',
     alignItems: 'center',
     marginBottom: '1rem',
@@ -53,7 +68,8 @@ const useStyles = makeStyles(() => ({
       background: colors.high
     }
   },
-  desc: {
+
+  [`& .${classes.desc}`]: {
     minWidth: 350,
     maxWidth: 350,
     minHeight: 100,
@@ -63,7 +79,8 @@ const useStyles = makeStyles(() => ({
     borderRadius: '4px',
     borderColor: colors.textLight
   },
-  txtInp: {
+
+  [`& .${classes.txtInp}`]: {
     width: '350px',
     transform: 'scale(1,.8)',
     '& .MuiInputBase-input': {
@@ -84,9 +101,9 @@ const useStyles = makeStyles(() => ({
 const MonitorReview = (props: any) => {
   const formikProps = useFormikContext();
   const { values }: any = formikProps;
-  const classes = useStyles();
+
   return (
-    <>
+    (<Root>
       <Box className={classes.reviewInput}>
         <Box className={classes.reviewInputTitle}>Monitor Name</Box>
         <TextField
@@ -169,7 +186,7 @@ const MonitorReview = (props: any) => {
           disabled={true}
         />
       </Box>
-    </>
+    </Root>)
   );
 };
 

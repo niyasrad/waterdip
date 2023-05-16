@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import { styled } from '@mui/material/styles';
 import DateRangeSelect from './DateRangeSelect';
 import { formatDateTime } from '../../../../utils/date';
 import trashOutline from '@iconify/icons-eva/trash-outline';
 import { Icon } from '@iconify/react';
-import { Box, TextField, MenuItem, Button } from '@material-ui/core';
-import { Grid } from '@material-ui/core';
+import { Box, TextField, MenuItem, Button } from '@mui/material';
+import { Grid } from '@mui/material';
 import { colors } from '../../../../theme/colors';
 import { useModelDelete } from 'api/models/DeleteModel';
 import { useNavigate, useParams } from 'react-router';
@@ -13,8 +13,28 @@ import { PATH_DASHBOARD } from 'routes/paths';
 import { useModelUpdate } from 'api/models/UpdateModel';
 import { useSnackbar } from 'notistack';
 
-const useStyles = makeStyles(() => ({
-  outerBox: {
+const PREFIX = 'DialogBoxPart';
+
+const classes = {
+  outerBox: `${PREFIX}-outerBox`,
+  boxButton: `${PREFIX}-boxButton`,
+  boxHeading: `${PREFIX}-boxHeading`,
+  dateBoxButton: `${PREFIX}-dateBoxButton`,
+  boxDiv: `${PREFIX}-boxDiv`,
+  confiText: `${PREFIX}-confiText`,
+  confiBackButton: `${PREFIX}-confiBackButton`,
+  confiSaveButton: `${PREFIX}-confiSaveButton`,
+  confiDeleteButton: `${PREFIX}-confiDeleteButton`,
+  confiNoButton: `${PREFIX}-confiNoButton`,
+  confiYesButton: `${PREFIX}-confiYesButton`,
+  baseLineContent: `${PREFIX}-baseLineContent`,
+  btnContainer: `${PREFIX}-btnContainer`,
+  btn: `${PREFIX}-btn`
+};
+
+// TODO jss-to-styled codemod: The Fragment root was replaced by div. Change the tag if needed.
+const Root = styled('div')(() => ({
+  [`& .${classes.outerBox}`]: {
     background: '#FFFFFF',
     boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.08)',
     borderRadius: '0px',
@@ -22,7 +42,8 @@ const useStyles = makeStyles(() => ({
     paddingTop: '20px',
     paddingBottom: '20px'
   },
-  boxButton: {
+
+  [`& .${classes.boxButton}`]: {
     width: '100%',
     height: '40px',
     background: '#ffffff',
@@ -39,7 +60,8 @@ const useStyles = makeStyles(() => ({
     textAlign: 'left',
     paddingLeft: '30px'
   },
-  boxHeading: {
+
+  [`& .${classes.boxHeading}`]: {
     fontFamily: 'Poppins',
     fontStyle: 'normal',
     fontWeight: 500,
@@ -48,7 +70,8 @@ const useStyles = makeStyles(() => ({
     paddingLeft: '30px',
     paddingRight: '30px'
   },
-  dateBoxButton: {
+
+  [`& .${classes.dateBoxButton}`]: {
     fontFamily: 'Poppins',
     fontStyle: 'normal',
     fontWeight: 500,
@@ -58,11 +81,12 @@ const useStyles = makeStyles(() => ({
     background: '#ffffff',
     float: 'right'
   },
-  boxDiv: {
-    paddingLeft: '30px',
-    paddingRight: '30px'
+
+  [`& .${classes.boxDiv}`]: {
+    padding: '30px'
   },
-  confiText: {
+
+  [`& .${classes.confiText}`]: {
     fontFamily: 'Poppins',
     fontStyle: 'normal',
     fontWeight: 500,
@@ -73,7 +97,8 @@ const useStyles = makeStyles(() => ({
     marginTop: '18px',
     marginBottom: '30px'
   },
-  confiBackButton: {
+
+  [`& .${classes.confiBackButton}`]: {
     fontFamily: 'Poppins',
     fontStyle: 'normal',
     fontWeight: 500,
@@ -88,7 +113,8 @@ const useStyles = makeStyles(() => ({
     background: '#ffffff',
     borderWidth: '1px'
   },
-  confiSaveButton: {
+
+  [`& .${classes.confiSaveButton}`]: {
     fontFamily: 'Poppins',
     fontStyle: 'normal',
     fontWeight: 500,
@@ -104,7 +130,8 @@ const useStyles = makeStyles(() => ({
     height: '30px',
     borderWidth: '1px'
   },
-  confiDeleteButton: {
+
+  [`& .${classes.confiDeleteButton}`]: {
     fontFamily: 'Poppins',
     fontStyle: 'normal',
     fontWeight: 500,
@@ -121,7 +148,8 @@ const useStyles = makeStyles(() => ({
     borderWidth: '1px',
     marginTop: '10px'
   },
-  confiNoButton: {
+
+  [`& .${classes.confiNoButton}`]: {
     fontFamily: 'Poppins',
     fontStyle: 'normal',
     fontWeight: 500,
@@ -137,7 +165,8 @@ const useStyles = makeStyles(() => ({
     borderWidth: '1px',
     marginTop: '10px'
   },
-  confiYesButton: {
+
+  [`& .${classes.confiYesButton}`]: {
     fontFamily: 'Poppins',
     fontStyle: 'normal',
     fontWeight: 500,
@@ -153,18 +182,21 @@ const useStyles = makeStyles(() => ({
     borderWidth: '1px',
     marginTop: '10px'
   },
-  baseLineContent: {
+
+  [`& .${classes.baseLineContent}`]: {
     width: '100%',
     borderRadius: '4px',
     paddingTop: '1rem',
     paddingLeft: '1.1rem',
     paddingRight: '1.1rem'
   },
-  btnContainer: {
+
+  [`& .${classes.btnContainer}`]: {
     display: 'flex',
     justifyContent: 'flex-end'
   },
-  btn: {
+
+  [`& .${classes.btn}`]: {
     paddingLeft: '1.5rem',
     paddingRight: '1.5rem',
     background: colors.textPrimary,
@@ -180,7 +212,7 @@ type Props = {
 
 export const DialogBoxPart = ({ onSave, onSelect, stringToMilliseconds }: Props) => {
   const now = new Date();
-  const classes = useStyles();
+
   const [boxDisplay, setBoxDisplay] = useState(true);
   const [timeDisplay, setTimeDisplay] = useState(false);
   const [selectDate, setSelectDate] = useState(false);
@@ -209,7 +241,7 @@ export const DialogBoxPart = ({ onSave, onSelect, stringToMilliseconds }: Props)
   };
 
   return (
-    <>
+    (<Root>
       {boxDisplay === true ? (
         <div className={classes.outerBox}>
           <button
@@ -458,7 +490,7 @@ export const DialogBoxPart = ({ onSave, onSelect, stringToMilliseconds }: Props)
         </Box>
         </div>
       ) : null}
-    </>
+    </Root>)
   );
 };
 
@@ -467,7 +499,7 @@ type DeleteProps = {
 };
 
 export const DeleteDialogBox = ({ onDelete }: DeleteProps) => {
-  const classes = useStyles();
+
   const [boxDisplay, setBoxDisplay] = useState(true);
   const [confiDisplay, setconfiDisplay] = useState(false);
   const [confirm, setConfirm] = useState('');
@@ -481,7 +513,7 @@ export const DeleteDialogBox = ({ onDelete }: DeleteProps) => {
   }, [expandForm]);
 
   return (
-    <>
+    <Root>
       {boxDisplay === true ? (
         <div className={classes.outerBox}>
           <div className={classes.boxHeading}>
@@ -536,7 +568,7 @@ export const DeleteDialogBox = ({ onDelete }: DeleteProps) => {
                     id="outlined-basic"
                     label="Type"
                     variant="outlined"
-                    sx={{ height: '60px !important', width: '300px' }}
+                    sx={{ height: '60px !important', width: '300px', marginTop: '20px'}}
                     onChange={(e: React.ChangeEvent<{ value: unknown }>) => {
                       setConfirm(e.target.value as string);
                     }}
@@ -575,6 +607,6 @@ export const DeleteDialogBox = ({ onDelete }: DeleteProps) => {
           </div>
         </div>
       ) : null}
-    </>
+    </Root>
   );
 };

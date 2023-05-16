@@ -6,21 +6,26 @@ import {
   TableBody,
   TableCell,
   TableContainer
-} from '@material-ui/core';
+} from '@mui/material';
+import { styled } from '@mui/material/styles';
 // components
 import Scrollbar from '../../Scrollbar';
 //
 import CollapsibleTableRow from './CollapsibleTableRow';
-import { makeStyles } from '@material-ui/core/styles';
+const PREFIX = 'index';
 
-// ----------------------------------------------------------------------
+const classes = {
+  containerTable: `${PREFIX}-containerTable`,
+  tableHead: `${PREFIX}-tableHead`
+};
 
-const useStyles = makeStyles(() => ({
-  containerTable: {
+const StyledScrollbar = styled(Scrollbar)(() => ({
+  [`& .${classes.containerTable}`]: {
     marginTop: '10px',
     marginBottom: '50px'
   },
-  tableHead: {
+
+  [`& .${classes.tableHead}`]: {
     backgroundColor: '#E5E8EB',
     color: '#212B36',
     boxShadow: 'none !important',
@@ -34,9 +39,9 @@ type Props = {
   data_type: string;
 };
 export default function CollapsibleTable({ dataValue, data_type }: Props) {
-  const classes = useStyles();
+
   return (
-    <Scrollbar>
+    <StyledScrollbar>
       <TableContainer sx={{ minWidth: 1220, mt: 3 }} className={classes.containerTable}>
         <Table>
           <TableHead>
@@ -89,6 +94,6 @@ export default function CollapsibleTable({ dataValue, data_type }: Props) {
           </TableBody>
         </Table>
       </TableContainer>
-    </Scrollbar>
+    </StyledScrollbar>
   );
 }

@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { motion, useAnimation, MotionProps } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 // material
-import { Box, BoxProps } from '@material-ui/core';
+import { Box, BoxProps } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
