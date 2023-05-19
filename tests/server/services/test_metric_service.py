@@ -39,6 +39,7 @@ from waterdip.core.commons.models import (
     FixedTimeWindow,
     TimeRange,
 )
+from waterdip.server.apis.models.metrics import PSIFeatureBreakdown, PSIMetricResponse
 from waterdip.server.db.models.dataset_rows import BaseEventRowDB, EventDataColumnDB
 from waterdip.server.db.models.datasets import BaseDatasetDB
 from waterdip.server.db.models.models import (
@@ -49,10 +50,6 @@ from waterdip.server.db.models.models import (
     ModelBaselineTimeWindowType,
     ModelVersionSchemaFieldDetails,
     ModelVersionSchemaInDB,
-)
-from waterdip.server.apis.models.metrics import (
-    PSIMetricResponse,
-    PSIFeatureBreakdown
 )
 from waterdip.server.db.mongodb import (
     MONGO_COLLECTION_MODEL_VERSIONS,
@@ -210,8 +207,7 @@ class TestMetricService:
             dataset_service=DatasetService.get_instance(
                 DatasetRepository.get_instance(self.mock_mongo_backend)
             ),
-            event_repo=EventDatasetRowRepository.get_instance(
-                self.mock_mongo_backend),
+            event_repo=EventDatasetRowRepository.get_instance(self.mock_mongo_backend),
         )
         self.psi_metric_service = PSIMetricService.get_instance(
             model_service=ModelService.get_instance(
@@ -223,10 +219,8 @@ class TestMetricService:
             dataset_service=DatasetService.get_instance(
                 DatasetRepository.get_instance(self.mock_mongo_backend)
             ),
-            event_repo=EventDatasetRowRepository.get_instance(
-                self.mock_mongo_backend),
-            batch_repo=BatchDatasetRowRepository.get_instance(
-                self.mock_mongo_backend),
+            event_repo=EventDatasetRowRepository.get_instance(self.mock_mongo_backend),
+            batch_repo=BatchDatasetRowRepository.get_instance(self.mock_mongo_backend),
         )
 
         self.mock_mongo_backend.database[MONGO_COLLECTION_MODELS].insert_many(
@@ -286,9 +280,9 @@ class TestMetricService:
             }
         }
         self.psiMetricServiceResponse = PSIMetricResponse(
-            feat_breakdown=[PSIFeatureBreakdown(name='psi', driftscore=0.5)],
+            feat_breakdown=[PSIFeatureBreakdown(name="psi", driftscore=0.5)],
             data=[0.5],
-            time_buckets=['22-02-2023'],
+            time_buckets=["22-02-2023"],
         )
         self.dataset = BaseEventRowDB(
             row_id=uuid.uuid4(),
@@ -346,8 +340,7 @@ class TestMetricService:
             ),
         )
 
-        assert model_performance["accuracy"] == {
-            "date": ["29-01-2023"], "value": [0.5]}
+        assert model_performance["accuracy"] == {"date": ["29-01-2023"], "value": [0.5]}
 
     def test_should_return_exception_if_positive_class_is_none(
         self, mocker, mock_mongo_backend
@@ -567,8 +560,7 @@ class TestMetricService:
 
     @classmethod
     def teardown_class(self):
-        self.mock_mongo_backend.database[MONGO_COLLECTION_MODELS].delete_many({
-        })
+        self.mock_mongo_backend.database[MONGO_COLLECTION_MODELS].delete_many({})
         self.mock_mongo_backend.database[MONGO_COLLECTION_MODEL_VERSIONS].delete_many(
             {}
         )

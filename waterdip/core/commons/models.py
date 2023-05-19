@@ -99,8 +99,9 @@ class TimeRange(BaseModel):
     def get_date_list(self) -> List[str]:
         return [
             (self.start_time + timedelta(days=x)).strftime("%d-%m-%Y")
-                for x in range(0, (self.end_time - self.start_time).days + 1)
+            for x in range(0, (self.end_time - self.start_time).days + 1)
         ]
+
 
 class ModelBaselineTimeWindowType(str, Enum):
     """
@@ -323,3 +324,35 @@ class MonitorSeverity(str, Enum):
     LOW = "LOW"
     MEDIUM = "MEDIUM"
     HIGH = "HIGH"
+
+
+class Integration(str, Enum):
+    """
+    integrations for monitoring and data source
+
+    Attributes:
+    ------------------
+    DATA_SOURCE:
+        Data source
+    MONITORING:
+        Moinitoring
+    """
+
+    DATA_SOURCE = ("DATA_SOURCE",)
+    MONITORING = "MONITORING"
+
+
+class Integration_Type(str, Enum):
+    """
+    type of integrations for monitoring
+
+    Attributes:
+    ------------------
+    SLACK:
+        Slack
+    TEAMS:
+        Microsoft Teams
+    """
+
+    SLACK = ("SLACK",)
+    TEAMS = "TEAMS"

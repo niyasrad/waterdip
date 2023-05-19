@@ -16,6 +16,7 @@ from fastapi import APIRouter
 
 from waterdip.server.apis.routes.alerts_routes import router as alerts_routes
 from waterdip.server.apis.routes.dataset_routers import router as dataset_routers
+from waterdip.server.apis.routes.integration_routes import router as integration_routes
 from waterdip.server.apis.routes.logging_routes import router as logging_routes
 from waterdip.server.apis.routes.metrics_routes import router as metrics_routes
 from waterdip.server.apis.routes.model_routes import router as model_routes
@@ -31,3 +32,4 @@ api_router.include_router(monitor_routes, tags=["monitors"], prefix="/v1")
 api_router.include_router(metrics_routes, tags=["metrics"], prefix="/v1")
 api_router.include_router(task_routes, tags=["tasks"], prefix="/v1")
 api_router.include_router(alerts_routes, tags=["alerts"], prefix="/v1")
+api_router.include_router(integration_routes, tags=["integration"], prefix="/v1")

@@ -35,6 +35,8 @@ from waterdip.server.db.models.monitors import (
 from waterdip.server.db.mongodb import MongodbBackend
 from waterdip.server.db.repositories.alert_repository import AlertRepository
 from waterdip.server.db.repositories.dataset_repository import DatasetRepository
+from waterdip.server.db.repositories.integration_repository import IntegrationRepository
+from waterdip.server.services.integration_service import IntegrationService
 
 
 @pytest.mark.usefixtures("mock_mongo_backend")
@@ -42,7 +44,6 @@ class TestMonitorProcessor:
     def test_should_process_data_quality_monitor(
         self, mocker, mock_mongo_backend: MongodbBackend
     ):
-
         mocker.patch(
             "waterdip.processor.monitors.monitor_processor.MonitorProcessor._get_event_dataset",
             return_value=BaseDatasetDB(
@@ -84,6 +85,11 @@ class TestMonitorProcessor:
             mongodb_backend=mock_mongo_backend,
             alert_repo=AlertRepository.get_instance(mongodb=mock_mongo_backend),
             dataset_repo=DatasetRepository.get_instance(mongodb=mock_mongo_backend),
+            integration_service=IntegrationService.get_instance(
+                repository=IntegrationRepository.get_instance(
+                    mongodb=mock_mongo_backend
+                )
+            ),
         )
         violation = monitor_processor.process()
         assert len(violation) == 1

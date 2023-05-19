@@ -25,10 +25,10 @@ MONGO_COLLECTION_BATCH_ROWS = settings.mongo_collection_batch_rows
 MONGO_COLLECTION_EVENT_ROWS = settings.mongo_collection_event_rows
 MONGO_COLLECTION_MONITORS = settings.mongo_collection_monitors
 MONGO_COLLECTION_ALERTS = settings.mongo_collection_alerts
+MONGO_COLLECTION_INTEGRATIONS = settings.mongo_collection_integrations
 
 
 class MongodbBackend:
-
     _INSTANCE = None
 
     @classmethod

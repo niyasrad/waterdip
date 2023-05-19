@@ -45,6 +45,7 @@ from waterdip.server.db.mongodb import (
     MONGO_COLLECTION_BATCH_ROWS,
     MONGO_COLLECTION_DATASETS,
     MONGO_COLLECTION_EVENT_ROWS,
+    MONGO_COLLECTION_INTEGRATIONS,
     MONGO_COLLECTION_MODEL_VERSIONS,
     MONGO_COLLECTION_MODELS,
     MongodbBackend,
@@ -67,6 +68,15 @@ MODEL_VERSION_ID_V4 = "2e195bf6-9a3f-4a33-b7b1-37a603aadf44"
 MODEL_VERSION_ID_V5 = "2e195bf6-9a3f-4a33-b7b1-37a603aadf45"
 MODEL_VERSION_ID_V2_NAME = "v2"
 DATASET_EVENT_ID_V2 = "2e195bf6-7a1f-4a33-b7b1-37a603aadde2"
+
+INTEGRATION_ID_V1 = "de6af49c-e80b-4852-b8dd-3b8fdd7f98f7"
+INTEGRATION_ID_V2 = "de6af49c-e80b-4852-b8dd-3b8fdd7f98f8"
+INTEGRATION_ID_V3 = "de6af49c-e80b-4852-b8dd-3b8fdd7f98f9"
+
+INTEGRATION_APP_NAME = "test_app"
+INTEGRATION_CONFIGURATION_V1 = {"type": "TEAMS", "webhook_url": "test_url V1"}
+INTEGRATION_CONFIGURATION_V2 = {"type": "TEAMS", "webhook_url": "test_url V2"}
+INTEGRATION_CONFIGURATION_V3 = {"type": "TEAMS", "webhook_url": "test_url V3"}
 
 
 MODEL_VERSION_V1_SCHEMA = {
@@ -106,6 +116,7 @@ class MongodbBackendTesting(MongodbBackend):
             MONGO_COLLECTION_DATASETS,
             MONGO_COLLECTION_BATCH_ROWS,
             MONGO_COLLECTION_EVENT_ROWS,
+            MONGO_COLLECTION_INTEGRATIONS,
         ]
         for collection in collections:
             self._database.create_collection(collection)
@@ -249,6 +260,25 @@ def setup_metrics_row(database):
     database[MONGO_COLLECTION_BATCH_ROWS].insert_many(
         documents=[row.dict() for row in rows]
     )
+
+
+def setup_integration_data(database):
+    integrations = [
+        {
+            "integration_id": INTEGRATION_ID_V1,
+            "integration": "DATA_SOURCE",
+            "app_name": INTEGRATION_APP_NAME,
+            "configuration": INTEGRATION_CONFIGURATION_V1,
+        },
+        {
+            "integration_id": INTEGRATION_ID_V2,
+            "integration": "DATA_SOURCE",
+            "app_name": INTEGRATION_APP_NAME,
+            "configuration": INTEGRATION_CONFIGURATION_V2,
+        },
+    ]
+
+    database[MONGO_COLLECTION_INTEGRATIONS].insert_many(documents=integrations)
 
 
 def setup_metrics_event(database):

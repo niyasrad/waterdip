@@ -122,3 +122,6 @@ processor/runnotebook.ipynb
 .DS_Store
 *.db
 .redis*
+
+# Poetry
+poetry.lock
